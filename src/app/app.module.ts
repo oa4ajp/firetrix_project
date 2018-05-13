@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -20,6 +22,8 @@ import { AppRoutingModule } from './app.routing';
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
+import { LoginComponent } from './login/login.component';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -27,7 +31,9 @@ import { SimpleLayoutComponent } from './layouts/simple-layout.component';
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    ChartsModule
+    ChartsModule,
+    CoreModule,
+    SharedModule
   ],
   declarations: [
     AppComponent,
@@ -36,7 +42,8 @@ import { SimpleLayoutComponent } from './layouts/simple-layout.component';
     NAV_DROPDOWN_DIRECTIVES,
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective
+    AsideToggleDirective,
+    LoginComponent
   ],
   providers: [{
     provide: LocationStrategy,

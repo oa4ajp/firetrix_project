@@ -1,0 +1,83 @@
+@import '../../scss/_custom-variables.scss';
+@import '../../scss/core/helpers/mixins.scss';
+@import '../../scss/bootstrap-variables.scss';
+
+.container{
+    display: flex; 
+    flex-direction: row;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+} 
+
+.login-container{
+    margin: auto ;
+    width: 30%;
+    background-color: #fff;
+    border: 1px solid #e1e6ef;
+
+    @include bp(xs){
+        width: 100%;
+    }
+
+    @include bp(sm){
+        width: 100%;
+    }
+
+    @include bp(md){
+        width: 50%;
+    }
+
+    @include bp(lg){
+        width: 30%;
+    }
+
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.login-item{
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 2em;
+}
+
+.login-item__title{
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 1em;
+}
+
+.login-item__alert {
+    width: 100%;
+    display: block;
+    justify-content: center;
+    padding-bottom: 1.5em;
+}
+
+.login-img{
+    background-image: url('../../img/logo.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 200px auto;
+    width: 100%;
+    height: 80px;
+    background-color: $seaBuckthorn;
+}
+
+.login-form{
+    padding: 1.5rem 1.5rem;
+}
+
+.login-form__button{
+    width:150px;
+    margin:auto;
+}

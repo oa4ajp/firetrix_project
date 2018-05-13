@@ -1,3 +1,9 @@
+// Override Boostrap variables
+@import "bootstrap-variables";
+
+// Import core styles
+@import "bootstrap/variables";
+
 // Core Admin Variables
 
 $enable-sidebar-nav-rounded: false;
@@ -49,7 +55,7 @@ $navbar-border: (
 $navbar-brand-width:                250px;
 $navbar-brand-bg:                   $brand-primary;
 $navbar-brand-logo:                 url('../img/logo.png');
-$navbar-brand-logo-size:            90px auto;
+$navbar-brand-logo-size:            200px auto;
 $navbar-brand-border: (
     bottom: (
         size:                       1px,
@@ -168,3 +174,26 @@ $footer-borders: (
 
 $card-icon-bg:                      transparent;
 $card-icon-color:                   $body-color;
+
+
+$font-family: Open Sans, sans-serif;
+
+//Colors
+
+$color-orange: #FF7F00;
+$color-alt-orange: rgb(248, 153, 57);
+$color-blue: rgba(19, 110, 158, 0.86);
+$color-white: #FFF;
+$color-alt-white : #ffffff94;
+$color-gray : #989999;
+$color-lightgray: #ccc;
+$color-alt-lightgray: rgb(235, 235, 235);
+$color-black : #333333;
+
+$color-red: rgb(231,76,60);
+$color-green : #3c763d;
+$color-bckg-green : #dff0d8;
+$color-error : #d32727;
+$color-bckg-error : #f2dede;
+$color-alt-red : rgba(191, 0, 0, 0.8);
+

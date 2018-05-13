@@ -1,0 +1,27 @@
+<div class="container"> 
+  <div class="login-container">
+    <div class="login-img"></div>
+    <div class="login-form" (keypress)="keyPressLogin($event)">
+      <div class="login-item__title">
+        Sign In to your account
+      </div>
+      <div class="login-item">
+        <span class="input-group-addon"><i class="icon-user"></i></span>
+        <input type="text" class="form-control" placeholder="Username" [(ngModel)]="user.username">
+      </div>
+      <div class="login-item">
+        <span class="input-group-addon"><i class="icon-lock"></i></span>
+        <input type="password" class="form-control" placeholder="Password" [(ngModel)]="user.password">
+      </div>
+      <div *ngIf="showMessage" class="login-item__alert">
+          <app-message-box [message]="message" [type]="messageType" [showMessage]="showMessage" [centerMessage]="centerErrorMessage"></app-message-box>
+      </div>
+      <div class="login-item">
+        <button class="btn btn-primary login-form__button" (click)="login()">Login&nbsp;
+          <i class="fa fa-spinner fa-spin" *ngIf="isSpinnerVisible"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

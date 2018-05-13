@@ -1,0 +1,61 @@
+@import '../../../../scss/_custom-variables.scss';
+@import '../../../../scss/core/helpers/mixins.scss';
+
+.message-box {
+    width: 21rem;
+    background-color: $color-lightgray;
+    height: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    border-radius: .5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 15px 0 rgba(0, 0, 0, 0.19);
+    @include bp(md){
+        width: 21rem;
+    }
+    @include bp(lg){
+        width: 55rem;
+    }
+    @include bp(xl){
+        width: 65rem;
+    }
+    @include bp(xl){
+        width: 75rem;
+    }
+}
+
+.message-box--error {
+    color: $color-error;
+    background-color: $color-bckg-error;
+
+    height: 1rem;
+    margin-bottom: 1rem;
+
+    @include bp(md){
+        width: 42rem ;
+    }
+}
+
+.message-box--error-login {
+    color: $color-error;
+    background-color: $color-bckg-error;
+
+    height: 1rem;
+    margin-bottom: 1rem;
+
+    @include bp(sm){
+        width: 23rem;
+    }
+
+    @include bp(md){
+        width: 30rem;
+    }
+}
+
+.message-box--success {
+    color: $color-green;
+    background-color: $color-bckg-green;
+}
+
