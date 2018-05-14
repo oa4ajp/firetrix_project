@@ -33,22 +33,22 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
   }
   ngOnInit() {
     if (this.authService.isUserLogged()) {
-      this.router.navigate(['calendar']);
+      this.router.navigate(['dashboard']);
     }
   }
   ngDoCheck() {
   }
   login() {
     if(this.user.username.trim() === "" || this.user.password.trim() === "") {
-     // this.showMessage = true;
-      //this.message = Constants.MESSAGE_USER_AND_PWD_REQUIRED;
-     // this.messageType = 'error-login';
-      //this.showMessage = true;
+      this.showMessage = true;
+      this.message = Constants.MESSAGE_USER_AND_PWD_REQUIRED;
+      this.messageType = 'error-login';
+      this.showMessage = true;
       this.centerErrorMessage = true;
     }
     else {  
       this.isSpinnerVisible = true;
-      //this.showMessage = false;
+      this.showMessage = false;
       const encodedPassword = encodeURIComponent(this.user.password);
 
       this.getUserInformationFromTokenMock();
@@ -104,16 +104,16 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
             `{"name": "${user.firstname + ' ' + user.lastname}","userName": "${user.userid}","password": "","locationId": "${user.locationId}","officeId": "${user.officeId}", "isAdmin": ${user.isAdmin}}`);
 
 
-            this.router.navigate(['calendar']);           
+            this.router.navigate(['dashboard']);           
           }
       }, error => {
         if (error && error._body) {
           const data = JSON.parse(error._body);
           if (data && data.error) {
             if(data.error == 'invalid_grant'){
-              //this.message = data.error_description;
-              //this.messageType = 'error-login';
-              //this.showMessage = true;
+              this.message = data.error_description;
+              this.messageType = 'error-login';
+              this.showMessage = true;
               this.centerErrorMessage = true;
             }
           }
@@ -128,7 +128,7 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
       localStorage.setItem('user',
       `{"name": "${user.firstname + ' ' + user.lastname}","userName": "${user.userid}","password": "","locationId": "${user.locationId}","officeId": "${user.officeId}", "isAdmin": ${user.isAdmin}}`);
 
-      this.router.navigate(['calendar']);        
+      this.router.navigate(['dashboard']);        
     }
   }
 

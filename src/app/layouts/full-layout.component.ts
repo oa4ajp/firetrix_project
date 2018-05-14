@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthorizationService } from '../core/service/authorization.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FullLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthorizationService) { }
 
   public disabled:boolean = false;
   public status:{isopen:boolean} = {isopen: false};
@@ -22,4 +23,9 @@ export class FullLayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  logout() {
+    this.authService.logout();
+  }
+  
 }

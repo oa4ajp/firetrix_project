@@ -1,12 +1,12 @@
 /* 3rd party libraries */
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-//import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 
 /* our own custom services  */
 import { AuthorizationService } from './service/authorization.service';
+import { AuthGuardService } from './service/auth-guard.service';
 
 @NgModule({
   imports: [
@@ -17,6 +17,7 @@ import { AuthorizationService } from './service/authorization.service';
   declarations: [],
   providers: [
     /* our own custom services  */
+    AuthGuardService,
     AuthorizationService
   ]
 })

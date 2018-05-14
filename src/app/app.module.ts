@@ -23,11 +23,16 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
 import { LoginComponent } from './login/login.component';
+import { LoginModule } from './login/login.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    LoginModule,
+    // Routes get loaded in order. It is important that login
+    // come before AppRoutingModule, as
+    // AppRoutingModule defines the catch-all ** route
     AppRoutingModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
@@ -42,8 +47,7 @@ import { LoginComponent } from './login/login.component';
     NAV_DROPDOWN_DIRECTIVES,
     BreadcrumbsComponent,
     SIDEBAR_TOGGLE_DIRECTIVES,
-    AsideToggleDirective,
-    LoginComponent
+    AsideToggleDirective
   ],
   providers: [{
     provide: LocationStrategy,
