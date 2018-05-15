@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthorizationService } from '../core/service/authorization.service';
+import { AuthService } from '../core/service/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './full-layout.component.html'
 })
 export class FullLayoutComponent implements OnInit {
-
-  constructor(private authService: AuthorizationService) { }
+  public userDisplayName: string = '';
+  
+  constructor(private authService: AuthService) { 
+    this.userDisplayName = '';
+  }
 
   public disabled:boolean = false;
   public status:{isopen:boolean} = {isopen: false};
@@ -22,10 +25,16 @@ export class FullLayoutComponent implements OnInit {
     this.status.isopen = !this.status.isopen;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.user.subscribe(user => {
+      if(user){
+        this.userDisplayName = `Welcome, ${user.displayName}`;
+      }
+    });
+  }
 
   logout() {
-    this.authService.logout();
+    this.authService.signOut();
   }
   
 }

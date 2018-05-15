@@ -5,20 +5,27 @@ import { HttpModule } from '@angular/http';
 
 
 /* our own custom services  */
-import { AuthorizationService } from './service/authorization.service';
 import { AuthGuardService } from './service/auth-guard.service';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { environment } from '../../environments/environment';
+import { AuthService } from './service/auth.service';
 
 @NgModule({
   imports: [
-    /* 3rd party libraries */
+    /* 3rd party libraries */    
     CommonModule,
-    HttpModule 
+    HttpModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule
   ],
   declarations: [],
   providers: [
     /* our own custom services  */
     AuthGuardService,
-    AuthorizationService
+    AuthService
   ]
 })
 export class CoreModule {

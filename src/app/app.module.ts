@@ -49,10 +49,7 @@ import { LoginModule } from './login/login.module';
     SIDEBAR_TOGGLE_DIRECTIVES,
     AsideToggleDirective
   ],
-  providers: [{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
+  providers: [],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

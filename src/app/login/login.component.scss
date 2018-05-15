@@ -4,11 +4,57 @@
 
 .container{
     display: flex; 
-    flex-direction: row;
-    position: fixed;
+    flex-direction: column;
     width: 100%;
     height: 100%;
 } 
+
+.row-container{
+    display: flex; 
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+} 
+
+.social-login-container{
+    margin: auto;
+    width: 60%;
+
+    @include bp(xs){
+        width: 100%;
+    }
+
+    @include bp(sm){
+        width: 100%;
+    }
+
+    @include bp(md){
+        width: 50%;
+    }
+
+    @include bp(lg){
+        width: 60%;
+    }
+}
+
+.social-login-header{
+    text-align: center;
+    padding-top: 1em;
+}
+
+/*
+.btn-social.button[disabled] {
+    color: #333;
+    background-color: #fff;
+    border-color: #dbdbdb;
+    box-shadow: none;
+    opacity: .6;
+}
+*/
+.button[disabled] {
+    cursor: not-allowed;
+}
 
 .login-container{
     margin: auto ;
@@ -80,4 +126,8 @@
 .login-form__button{
     width:150px;
     margin:auto;
+}
+
+.button-container{
+    padding: 1em;
 }
