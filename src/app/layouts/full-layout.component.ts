@@ -12,6 +12,7 @@ export class FullLayoutComponent implements OnInit {
   public disabled:boolean = false;
   public status:{isopen:boolean} = {isopen: false};  
   public loggedUser: IUser;
+  public onlineUsers = 0;
   
   constructor(private authService: AuthService) {     
   }
@@ -27,6 +28,12 @@ export class FullLayoutComponent implements OnInit {
         this.loggedUser = user;
       }
     });
+
+    this.authService.getUsersOnline().subscribe( userList => {
+      let usersList = userList;
+      this.onlineUsers = usersList.length;
+    });
+
   }
 
   public toggled(open:boolean):void {

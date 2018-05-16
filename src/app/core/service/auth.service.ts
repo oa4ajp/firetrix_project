@@ -155,12 +155,12 @@ export class AuthService {
   } 
 
   public getUsersOnline(){
-
-      //let basePath: string = '/items';
-      //let items: FirebaseListObservable<Item[]> = null; 
       const listRef = this.rtdb.list<IUser>('users');
-
-      return listRef.valueChanges();
+      
+      return listRef.valueChanges<IUser>().map( users => 
+        users.filter(user => user.online == true)
+      );
+      
   }
 
  private updateOnConnect(userId: string) {   
