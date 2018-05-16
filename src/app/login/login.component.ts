@@ -42,7 +42,7 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
       this.isSpinnerVisible = true;
       this.showMessage = false;
             
-      //this.auth.emailSignUp(this.user.username, this.user.password);
+      //this.authService.emailSignUp(this.user.username, this.user.password);
       
       const encodedPassword = encodeURIComponent(this.user.password);
       

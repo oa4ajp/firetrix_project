@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../core/service/auth.service';
+import { IUser } from '../core/models/interface-user';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,13 +8,26 @@ import { AuthService } from '../core/service/auth.service';
 })
 export class FullLayoutComponent implements OnInit {
   public userDisplayName: string = '';
+  public userPhotoUrl: string = '';
+  public disabled:boolean = false;
+  public status:{isopen:boolean} = {isopen: false};  
+  public loggedUser: IUser;
   
-  constructor(private authService: AuthService) { 
-    this.userDisplayName = '';
+  constructor(private authService: AuthService) {     
   }
 
-  public disabled:boolean = false;
-  public status:{isopen:boolean} = {isopen: false};
+  ngOnInit(): void {
+    this.userDisplayName = '';
+    this.userPhotoUrl = '';
+
+    this.authService.user.subscribe(user => {
+      if(user){
+        this.userDisplayName = `Welcome, ${user.displayName}`;
+        this.userPhotoUrl = user.photoURL;
+        this.loggedUser = user;
+      }
+    });
+  }
 
   public toggled(open:boolean):void {
     console.log('Dropdown is now: ', open);
@@ -25,16 +39,8 @@ export class FullLayoutComponent implements OnInit {
     this.status.isopen = !this.status.isopen;
   }
 
-  ngOnInit(): void {
-    this.authService.user.subscribe(user => {
-      if(user){
-        this.userDisplayName = `Welcome, ${user.displayName}`;
-      }
-    });
-  }
-
   logout() {
-    this.authService.signOut();
+    this.authService.signOut(this.loggedUser);
   }
   
 }

@@ -3,37 +3,48 @@ import { Router } from '@angular/router';
 
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+
+import { IUser } from '../models/interface-user'
 //import { NotifyService } from './notify.service';
 
 import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
-
-interface User {
-  uid: string;
-  email?: string | null;
-  photoURL?: string;
-  displayName?: string;
-}
+import 'rxjs/add/operator/first';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/elementAt';
 
 @Injectable()
 export class AuthService {
 
-  user: Observable<User | null>;
+  user: Observable<IUser | null>;
+  userId: string; // current user uid
 
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore,
+              private rtdb: AngularFireDatabase,
               private router: Router/*,
               /*private notify: NotifyService*/)  {
 
     this.user = this.afAuth.authState
       .switchMap((user) => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          return this.rtdb.object(`users/${user.uid}`).valueChanges();
         } else {
           return Observable.of(null);
         }
       });
+
+      this.afAuth.authState
+      .do(user => {
+        if (user) {
+            this.updateOnConnect(user.uid);
+            this.updateOnDisconnect(user.uid);
+        }
+      })
+      .subscribe();
+
+      this.getUsersOnline();
+
   }
 
   ////// OAuth Methods /////
@@ -68,7 +79,6 @@ export class AuthService {
   }
 
   //// Anonymous Auth ////
-
   anonymousLogin() {
     return this.afAuth.auth.signInAnonymously()
       .then((user) => {
@@ -83,7 +93,6 @@ export class AuthService {
   }
 
   //// Email/Password Auth ////
-
   emailSignUp(email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
@@ -107,12 +116,15 @@ export class AuthService {
       */
   }
 
-  signOut() {
-    this.afAuth.auth.signOut().then(() => {
-        this.router.navigate(['login']);
+  signOut(user: IUser) {
+    this.afAuth.auth.signOut().then(() => {        
+      const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
+      userRef.update({online: false});
+
+      this.router.navigate(['login']);
     });
   }
-
+  
   // If error, console log and notify user
   private handleError(error: Error) {
     console.error(error);
@@ -120,22 +132,56 @@ export class AuthService {
   }
 
   // Sets user data to firestore after succesful login
-  public updateUserData(user: User) {
+  public updateUserData(user: IUser) {
 
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
+    const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
     
     let dbDisplayName = null;
-    userRef.valueChanges().subscribe(dbUser => {
-      dbDisplayName = dbUser.displayName;
+    userRef.valueChanges().first().subscribe(dbUser => {
+      if(dbUser){
+        dbDisplayName = dbUser['displayName'];
+      }            
 
-      const data: User = {
+      const data: IUser = {
         uid: user.uid,
         email: user.email || null,
         displayName: user.displayName || dbDisplayName || 'nameless user',
         photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
+        online: true
       };
       userRef.set(data);
 
     });
+  } 
+
+  public getUsersOnline(){
+
+      //let basePath: string = '/items';
+      //let items: FirebaseListObservable<Item[]> = null; 
+      const listRef = this.rtdb.list<IUser>('users');
+
+      return listRef.valueChanges();
+  }
+
+ private updateOnConnect(userId: string) {   
+  this.rtdb.object('.info/connected').valueChanges().elementAt(1)
+    .do(connected => {
+        //console.log(connected);
+        const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${userId}`);    
+        if(connected){
+          userRef.update({online: true});
+        }else{
+          userRef.update({online: false});
+        }
+    })
+    .subscribe()                  
+  }
+
+ private updateOnDisconnect(userId: string) {
+    this.rtdb.database.ref()
+      .child(`users/${userId}`)
+      .onDisconnect()
+      .update({online: false})
   }  
+
 }
