@@ -152,35 +152,35 @@
           <div class="text-muted">Visits</div>
           <strong>{{traffic.visitsQuantity}} Users ({{traffic.visitsPercentage}}%)</strong>
           <div class="progress progress-xs mt-2">
-            <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-success" role="progressbar" [ngStyle]="getWidthPercentageStyle(traffic.visitsPercentage)" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </li>
         <li class="hidden-sm-down">
           <div class="text-muted">Unique</div>
           <strong>{{traffic.uniqueVisitsQuantity}} Users ({{traffic.uniqueVisitsPercentage}}%)</strong>
           <div class="progress progress-xs mt-2">
-            <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-info" role="progressbar" [ngStyle]="getWidthPercentageStyle(traffic.uniqueVisitsPercentage)" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </li>
         <li>
           <div class="text-muted">Pageviews</div>
           <strong>{{traffic.pageViewsQuantity}} Views ({{traffic.pageViewsPercentage}}%)</strong>
           <div class="progress progress-xs mt-2">
-            <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-warning" role="progressbar" [ngStyle]="getWidthPercentageStyle(traffic.pageViewsPercentage)" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </li>
         <li class="hidden-sm-down">
           <div class="text-muted">New Users</div>
           <strong>{{traffic.newUsersQuantity}} Users ({{traffic.newUsersPercentage}}%)</strong>
           <div class="progress progress-xs mt-2">
-            <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="getWidthPercentageStyle(traffic.newUsersPercentage)" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </li>
         <li class="hidden-sm-down">
           <div class="text-muted">Bounce Rate</div>
           <strong>{{traffic.bounceRate}}%</strong>
           <div class="progress progress-xs mt-2">
-            <div class="progress-bar" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar" role="progressbar" [ngStyle]="getWidthPercentageStyle(traffic.bounceRate)" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
         </li>
       </ul>
@@ -311,7 +311,7 @@
                   <div class="callout callout-info">
                     <small class="text-muted">New Clients</small>
                     <br>
-                    <strong class="h4">9,123</strong>
+                    <strong class="h4">{{newClientsValue}}</strong>
                     <div class="chart-wrapper" style="width:100px;height:30px;">
                       <canvas baseChart class="chart"
                       [datasets]="sparklineChartData1"
@@ -329,7 +329,7 @@
                   <div class="callout callout-danger">
                     <small class="text-muted">Recuring Clients</small>
                     <br>
-                    <strong class="h4">22,643</strong>
+                    <strong class="h4">{{recClientsValue}}</strong>
                     <div class="chart-wrapper" style="width:100px;height:30px;">
                       <canvas baseChart class="chart"
                       [datasets]="sparklineChartData2"
@@ -346,97 +346,19 @@
               </div><!--/.row-->
               <hr class="mt-0">
               <ul class="horizontal-bars">
-                <li>
+                <li *ngFor="let salesByDay of salesByDayList">
                   <div class="title">
-                    Monday
+                    {{salesByDay.description}}
                   </div>
                   <div class="bars">
                     <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 34%" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-info" role="progressbar" [ngStyle]="getWidthPercentageStyle(salesByDay.newClients)" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 78%" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="getWidthPercentageStyle(salesByDay.recurringClients)" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
-                </li>
-                <li>
-                  <div class="title">
-                    Tuesday
-                  </div>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 56%" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 94%" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="title">
-                    Wednesday
-                  </div>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 12%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 67%" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="title">
-                    Thursday
-                  </div>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 91%" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="title">
-                    Friday
-                  </div>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 73%" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="title">
-                    Saturday
-                  </div>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 53%" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 82%" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="title">
-                    Sunday
-                  </div>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-info" role="progressbar" style="width: 9%" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-danger" role="progressbar" style="width: 69%" aria-valuenow="69" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
+                </li>                
                 <li class="legend">
                   <span class="badge badge-pill badge-info"></span> <small>New clients</small> &nbsp; <span class="badge badge-pill badge-danger"></span> <small>Recurring clients</small>
                 </li>
@@ -448,7 +370,7 @@
                   <div class="callout callout-warning">
                     <small class="text-muted">Pageviews</small>
                     <br>
-                    <strong class="h4">78,623</strong>
+                    <strong class="h4">{{pageViewsValue}}</strong>
                     <div class="chart-wrapper" style="width:100px;height:30px;">
                       <canvas baseChart class="chart"
                       [datasets]="sparklineChartData1"
@@ -466,7 +388,7 @@
                   <div class="callout callout-success">
                     <small class="text-muted">Organic</small>
                     <br>
-                    <strong class="h4">49,123</strong>
+                    <strong class="h4">{{organicsValue}}</strong>
                     <div class="chart-wrapper" style="width:100px;height:30px;">
                       <canvas baseChart class="chart"
                       [datasets]="sparklineChartData2"
@@ -486,7 +408,7 @@
                 <li>
                   <i class="icon-user"></i>
                   <span class="title">Male</span>
-                  <span class="value">43%</span>
+                  <span class="value">{{salesByGender.male}}%</span>
                   <div class="bars">
                     <div class="progress progress-xs">
                       <div class="progress-bar bg-warning" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
@@ -496,7 +418,7 @@
                 <li>
                   <i class="icon-user-female"></i>
                   <span class="title">Female</span>
-                  <span class="value">37%</span>
+                  <span class="value">{{salesByGender.female}}%</span>
                   <div class="bars">
                     <div class="progress progress-xs">
                       <div class="progress-bar bg-warning" role="progressbar" style="width: 37%" aria-valuenow="37" aria-valuemin="0" aria-valuemax="100"></div>
@@ -504,46 +426,16 @@
                   </div>
                 </li>
                 <li class="divider"></li>
-                <li>
-                  <i class="icon-globe"></i>
-                  <span class="title">Organic Search</span>
-                  <span class="value">191,235 <span class="text-muted small">(56%)</span></span>
+                <li *ngFor="let salesByOrigin of salesByOriginList">
+                  <i class="{{salesByOrigin.iconClass}}"></i>
+                  <span class="title">{{salesByOrigin.description}}</span>
+                  <span class="value">{{salesByOrigin.quantity}} <span class="text-muted small">({{salesByOrigin.percentage}}%)</span></span>
                   <div class="bars">
                     <div class="progress progress-xs">
-                      <div class="progress-bar bg-success" role="progressbar" style="width: 56%" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="progress-bar bg-success" role="progressbar" [ngStyle]="getWidthPercentageStyle(salesByOrigin.percentage)" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
-                </li>
-                <li>
-                  <i class="icon-social-facebook"></i>
-                  <span class="title">Facebook</span>
-                  <span class="value">51,223 <span class="text-muted small">(15%)</span></span>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-success" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-social-twitter"></i>
-                  <span class="title">Twitter</span>
-                  <span class="value">37,564 <span class="text-muted small">(11%)</span></span>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-success" role="progressbar" style="width: 11%" aria-valuenow="11" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-social-linkedin"></i>
-                  <span class="title">LinkedIn</span>
-                  <span class="value">27,319 <span class="text-muted small">(8%)</span></span>
-                  <div class="bars">
-                    <div class="progress progress-xs">
-                      <div class="progress-bar bg-success" role="progressbar" style="width: 8%" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </li>
+                </li>                
                 <li class="divider text-center">
                   <button type="button" class="btn btn-sm btn-link text-muted" data-toggle="tooltip" data-placement="top" title="" data-original-title="show more"><i class="icon-options"></i></button>
                 </li>
@@ -555,7 +447,7 @@
                   <div class="callout">
                     <small class="text-muted">CTR</small>
                     <br>
-                    <strong class="h4">23%</strong>
+                    <strong class="h4">{{ctrValue}}%</strong>
                     <div class="chart-wrapper" style="width:100px;height:30px;">
                       <canvas baseChart class="chart"
                       [datasets]="sparklineChartData1"
@@ -573,7 +465,7 @@
                   <div class="callout callout-primary">
                     <small class="text-muted">Bounce Rate</small>
                     <br>
-                    <strong class="h4">5%</strong>
+                    <strong class="h4">{{bounceRateValue}}%</strong>
                     <div class="chart-wrapper" style="width:100px;height:30px;">
                       <canvas baseChart class="chart"
                       [datasets]="sparklineChartData2"
@@ -590,99 +482,15 @@
               </div><!--/.row-->
               <hr class="mt-0">
               <ul class="icons-list">
-                <li>
-                  <i class="icon-screen-desktop bg-primary"></i>
+                <li *ngFor="let product of productsList">
+                  <i class="{{product.iconClass}}"></i>
                   <div class="desc">
-                    <div class="title">iMac 4k</div>
+                    <div class="title">{{product.description}}</div>
                     <small>Lorem ipsum dolor sit amet</small>
                   </div>
                   <div class="value">
-                    <div class="small text-muted">Sold this week</div>
-                    <strong>1.924</strong>
-                  </div>
-                  <div class="actions">
-                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-screen-smartphone bg-info"></i>
-                  <div class="desc">
-                    <div class="title">Samsung Galaxy Edge</div>
-                    <small>Lorem ipsum dolor sit amet</small>
-                  </div>
-                  <div class="value">
-                    <div class="small text-muted">Sold this week</div>
-                    <strong>1.224</strong>
-                  </div>
-                  <div class="actions">
-                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-screen-smartphone bg-warning"></i>
-                  <div class="desc">
-                    <div class="title">iPhone 6S</div>
-                    <small>Lorem ipsum dolor sit amet</small>
-                  </div>
-                  <div class="value">
-                    <div class="small text-muted">Sold this week</div>
-                    <strong>1.163</strong>
-                  </div>
-                  <div class="actions">
-                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-user bg-danger"></i>
-                  <div class="desc">
-                    <div class="title">Premium accounts</div>
-                    <small>Lorem ipsum dolor sit amet</small>
-                  </div>
-                  <div class="value">
-                    <div class="small text-muted">Sold this week</div>
-                    <strong>928</strong>
-                  </div>
-                  <div class="actions">
-                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-social-spotify bg-success"></i>
-                  <div class="desc">
-                    <div class="title">Spotify Subscriptions</div>
-                    <small>Lorem ipsum dolor sit amet</small>
-                  </div>
-                  <div class="value">
-                    <div class="small text-muted">Sold this week</div>
-                    <strong>893</strong>
-                  </div>
-                  <div class="actions">
-                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-cloud-download bg-danger"></i>
-                  <div class="desc">
-                    <div class="title">Ebook</div>
-                    <small>Lorem ipsum dolor sit amet</small>
-                  </div>
-                  <div class="value">
-                    <div class="small text-muted">Downloads</div>
-                    <strong>121.924</strong>
-                  </div>
-                  <div class="actions">
-                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
-                  </div>
-                </li>
-                <li>
-                  <i class="icon-camera bg-warning"></i>
-                  <div class="desc">
-                    <div class="title">Photos</div>
-                    <small>Lorem ipsum dolor sit amet</small>
-                  </div>
-                  <div class="value">
-                    <div class="small text-muted">Uploaded</div>
-                    <strong>12.125</strong>
+                    <div class="small text-muted">{{product.quantityDescription}}</div>
+                    <strong>{{product.quantity}}</strong>
                   </div>
                   <div class="actions">
                     <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
@@ -696,10 +504,6 @@
           </div><!--/.row-->
           <br>
 
-          <div>
-            user test
-
-          </div>
           <table class="table table-responsive table-hover table-outline mb-0">
             <thead class="thead-default">
               <tr>

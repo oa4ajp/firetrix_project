@@ -12,9 +12,6 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../../environments/environment';
 import { AuthService } from './service/auth.service';
-import { SocialNetworkService } from './service/social-network.service';
-import { TrafficService } from './service/traffic.service';
-
 
 @NgModule({
   imports: [
@@ -30,9 +27,7 @@ import { TrafficService } from './service/traffic.service';
   providers: [
     /* our own custom services  */
     AuthGuardService,
-    AuthService,
-    SocialNetworkService,
-    TrafficService
+    AuthService
   ]
 })
 export class CoreModule {

@@ -1,14 +1,21 @@
-import { Component, OnInit, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../core/service/auth.service';
 import { OnDestroy } from "@angular/core";
 import { ISubscription } from "rxjs/Subscription";
-import { SocialNetworkService } from '../core/service/social-network.service';
-import { TrafficService } from '../core/service/traffic.service';
-import { SocialNetwork } from '../core/models/social-network';
-import { IUser } from '../core/models/interface-user';
-import { Traffic } from '../core/models/traffic';
 import { BaseChartDirective }   from 'ng2-charts/ng2-charts';
+
+import { AuthService } from '../core/service/auth.service';
+import { SocialNetworkService } from './services/social-network.service';
+import { TrafficService } from './services/traffic.service';
+import { SalesService } from './services/sales.service';
+import { SocialNetwork } from './models/social-network';
+import { IUser } from '../core/models/interface-user';
+import { Traffic } from './models/traffic';
+import { SalesTraffic } from './models/sales-traffic';
+import { SalesByDay } from './models/sales-by-day';
+import { SalesByGender } from './models/sales-by-gender';
+import { SalesByOrigin } from './models/sales-by-origin';
+import { Product }       from './models/product'
 
 @Component({
   templateUrl: 'dashboard.component.html'
@@ -28,12 +35,29 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   private usersSubscription: ISubscription;
   private trafficSubscription: ISubscription;
   private dailyTrafficSubscription: ISubscription;
+  private salesTrafficSubscription: ISubscription;
+  private salesByDaySubscription: ISubscription;
+  private salesByGenderSubscription: ISubscription;
+  private salesByOriginSubscription: ISubscription;
+  private productsSubscription: ISubscription;
   public usersList: IUser[];
   public traffic: Traffic;
   public mainChartElements:number = 27;
   public mainChartData1:Array<number> = [];
   public mainChartData2:Array<number> = [];
   public mainChartData3:Array<number> = [];
+  public salesTrafficList: SalesTraffic[];
+  public salesByDayList: SalesByDay[];
+  public salesByOriginList: SalesByOrigin[];
+  public salesByGender: SalesByGender;
+  public productsList: Product[];
+  
+  public newClientsValue: string = '0';
+  public recClientsValue: string = '0';
+  public pageViewsValue: string = '0';
+  public organicsValue: string = '0';
+  public ctrValue: string = '0';
+  public bounceRateValue: string = '0';
   
   public mainChartData:Array<any> = [
     {
@@ -57,7 +81,8 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     private router: Router, 
     private authService: AuthService ,
     private socialNetworkService: SocialNetworkService,
-    private trafficService: TrafficService
+    private trafficService: TrafficService,
+    private salesService: SalesService
   ) { 
     this.faceBook = new SocialNetwork();
     this.googlePlus = new  SocialNetwork();
@@ -65,7 +90,9 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.tweeter = new  SocialNetwork(); 
     this.usersList = [];
     this.traffic = new Traffic();
-
+    this.salesTrafficList = [];
+    this.salesByGender = new SalesByGender();
+    this.productsList = [];
   }
 
   ngOnInit(): void {
@@ -133,12 +160,84 @@ export class DashboardComponent implements OnInit, OnDestroy  {
           }
       }
     });
+
+    this.salesTrafficSubscription = this.salesService.getSalesTraffic().subscribe( trafficList => {
+      if(trafficList){
+        //this.salesTrafficList = trafficList;
+        trafficList.forEach( salesTraffic => {
+          switch (salesTraffic.code){
+            case 'BR':
+              this.bounceRateValue = salesTraffic.value;
+              break;
+            case 'CT':
+              this.ctrValue = salesTraffic.value;
+              break;
+            case 'NC':
+              this.newClientsValue = salesTraffic.value;
+              break;
+            case 'OR':
+              this.organicsValue = salesTraffic.value;
+              break;   
+            case 'PV':
+              this.pageViewsValue = salesTraffic.value;
+              break;  
+            case 'RC':
+              this.recClientsValue = salesTraffic.value;
+              break;                                                               
+          }
+        });
+      }
+    });
+
+    this.salesByDaySubscription = this.salesService.getSalesByDay().subscribe( salesByDayList => {
+      if(salesByDayList){        
+        this.salesByDayList = this.sortArray(salesByDayList);
+      }
+    });        
+
+    this.salesByGenderSubscription = this.salesService.getSalesByGender().subscribe( salesByGender => {
+      if(salesByGender){
+        this.salesByGender = salesByGender;
+      }
+    });
+
+    this.salesByOriginSubscription = this.salesService.getSalesByOrigin().subscribe( salesByOriginList => {
+      if(salesByOriginList){        
+        this.salesByOriginList = this.sortArray(salesByOriginList);
+      }
+    });
+
+    //productList
+    this.productsSubscription = this.salesService.getProducts().subscribe( productsList => {
+      if(productsList){        
+        this.productsList = this.sortArray(productsList);
+      }
+    });    
+
+  }
+
+  private sortArray(array: any[]){
+    return array.sort((obj1, obj2) => {
+        if (obj1.position > obj2.position) {
+            return 1;
+        }
+
+        if (obj1.position < obj2.position) {
+            return -1;
+        }
+
+        return 0;
+    });
   }
 
   ngOnDestroy() {
     this.socNetSubscription.unsubscribe();
     this.trafficSubscription.unsubscribe();
     this.dailyTrafficSubscription.unsubscribe();
+    this.salesByDaySubscription.unsubscribe();
+    this.salesByGenderSubscription.unsubscribe();
+    this.salesByOriginSubscription.unsubscribe();
+    this.productsSubscription.unsubscribe();
   }  
 
   //convert Hex to RGBA
@@ -559,4 +658,12 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
   public sparklineChartLegend:boolean = false;
   public sparklineChartType:string = 'line';
+
+  public getWidthPercentageStyle(percentage){
+    const styles = {
+        'width': percentage + '%'
+    };
+    return styles;
+  }
+
 }
