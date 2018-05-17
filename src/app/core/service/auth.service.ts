@@ -160,8 +160,13 @@ export class AuthService {
       return listRef.valueChanges<IUser>().map( users => 
         users.filter(user => user.online == true)
       );
-      
+
   }
+
+  public getUsers(){
+      const listRef = this.rtdb.list<IUser>('users');      
+      return listRef.valueChanges<IUser>();      
+  }  
 
  private updateOnConnect(userId: string) {   
   this.rtdb.object('.info/connected').valueChanges().elementAt(1)

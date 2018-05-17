@@ -1,18 +1,117 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../core/service/auth.service';
+import { OnDestroy } from "@angular/core";
+import { ISubscription } from "rxjs/Subscription";
+import { SocialNetworkService } from '../core/service/social-network.service';
+import { TrafficService } from '../core/service/traffic.service';
+import { SocialNetwork } from '../core/models/social-network';
+import { IUser } from '../core/models/interface-user';
+import { Traffic } from '../core/models/traffic';
+
 
 @Component({
   templateUrl: 'dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
-
-  constructor( private router: Router ) { }
-
+export class DashboardComponent implements OnInit, OnDestroy  {
   public brandPrimary:string =  '#20a8d8';
   public brandSuccess:string =  '#4dbd74';
   public brandInfo:string =   '#67c2ef';
   public brandWarning:string =  '#f8cb00';
   public brandDanger:string =   '#f86c6b';
+  public onlineUsers = 0;
+  private socNetSubscription: ISubscription;
+  public faceBook: SocialNetwork;
+  public googlePlus: SocialNetwork;
+  public linkedIn: SocialNetwork;
+  public tweeter: SocialNetwork;  
+  private usersSubscription: ISubscription;
+  private trafficSubscription: ISubscription;
+  private dailyTrafficSubscription: ISubscription;
+  public usersList: IUser[];
+  public traffic: Traffic;
+  public mainChartElements:number = 27;
+  public mainChartData1:Array<number> = [];
+  public mainChartData2:Array<number> = [];
+  public mainChartData3:Array<number> = [];
+
+  constructor( 
+    private router: Router, 
+    private authService: AuthService ,
+    private socialNetworkService: SocialNetworkService,
+    private trafficService: TrafficService
+  ) { 
+    this.faceBook = new SocialNetwork();
+    this.googlePlus = new  SocialNetwork();
+    this.linkedIn = new  SocialNetwork();
+    this.tweeter = new  SocialNetwork(); 
+    this.usersList = [];
+    this.traffic = new Traffic();
+
+  }
+
+  ngOnInit(): void {
+    //generate random values for mainChart
+    for (var i = 0; i <= this.mainChartElements; i++) {
+      //this.mainChartData1.push(this.random(50,200));
+      this.mainChartData2.push(this.random(80,100));
+      this.mainChartData3.push(65);
+    }
+
+    this.authService.getUsersOnline().subscribe( userList => {
+      let usersList = userList;
+      this.onlineUsers = usersList.length;
+    });
+
+    this.socNetSubscription = this.socialNetworkService.getSocialNetworks().subscribe( socNetList => {
+      //console.log(socNet);
+      if(socNetList){
+        socNetList.forEach( socNet => {
+          switch (socNet.code){
+            case 'FB':
+              this.faceBook = socNet;
+              break;
+            case 'TW':
+              this.tweeter = socNet;
+              break;
+            case 'LI':
+              this.linkedIn = socNet;
+              break;
+            case 'GP':
+               this.googlePlus = socNet;
+              break;                                    
+          }
+        });
+      }
+    });
+
+    this.usersSubscription = this.authService.getUsers().subscribe( users => {
+      if(users){
+        this.usersList = users;
+      }      
+    });
+
+    this.trafficSubscription = this.trafficService.getTraffic().subscribe( oTraffic => {
+      if(oTraffic){
+        this.traffic = oTraffic;
+      }      
+    });
+
+    this.dailyTrafficSubscription = this.trafficService.getDailyTraffic().subscribe( oDailyTrafficList => {
+      if(oDailyTrafficList){
+          oDailyTrafficList.forEach( dailyTraffic => {
+            this.mainChartData1.push(Number(dailyTraffic.value));
+          });
+      }
+    });
+
+  }
+
+  ngOnDestroy() {
+    this.socNetSubscription.unsubscribe();
+    this.trafficSubscription.unsubscribe();
+    this.dailyTrafficSubscription.unsubscribe();
+  }  
 
   //convert Hex to RGBA
   public convertHex(hex:string,opacity:number){
@@ -223,11 +322,6 @@ export class DashboardComponent implements OnInit {
   public random(min:number, max:number) {
     return Math.floor(Math.random()*(max-min+1)+min);
   }
-
-  public mainChartElements:number = 27;
-  public mainChartData1:Array<number> = [];
-  public mainChartData2:Array<number> = [];
-  public mainChartData3:Array<number> = [];
 
   public mainChartData:Array<any> = [
     {
@@ -450,14 +544,4 @@ export class DashboardComponent implements OnInit {
 
   public sparklineChartLegend:boolean = false;
   public sparklineChartType:string = 'line';
-
-
-  ngOnInit(): void {
-    //generate random values for mainChart
-    for (var i = 0; i <= this.mainChartElements; i++) {
-      this.mainChartData1.push(this.random(50,200));
-      this.mainChartData2.push(this.random(80,100));
-      this.mainChartData3.push(65);
-    }
-  }
 }

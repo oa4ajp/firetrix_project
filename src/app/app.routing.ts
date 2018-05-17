@@ -55,10 +55,6 @@ export const routes: Routes = [
       {
         path: 'charts',
         loadChildren: './chartjs/chartjs.module#ChartJSModule'
-      },
-      {
-        path: 'uikits',
-        loadChildren: './uikits/uikits.module#UIKitsModule'
       }
     ]
   },
