@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/service/auth.service';
 import { OnDestroy } from "@angular/core";
@@ -8,7 +8,7 @@ import { TrafficService } from '../core/service/traffic.service';
 import { SocialNetwork } from '../core/models/social-network';
 import { IUser } from '../core/models/interface-user';
 import { Traffic } from '../core/models/traffic';
-
+import { BaseChartDirective }   from 'ng2-charts/ng2-charts';
 
 @Component({
   templateUrl: 'dashboard.component.html'
@@ -34,6 +34,24 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   public mainChartData1:Array<number> = [];
   public mainChartData2:Array<number> = [];
   public mainChartData3:Array<number> = [];
+  
+  public mainChartData:Array<any> = [
+    {
+      data: this.mainChartData1,
+      label: 'Current'
+    },
+    {
+      data: this.mainChartData2,
+      label: 'Previous'
+    },
+    {
+      data: this.mainChartData3,
+      label: 'BEP'
+    }
+  ];
+
+  // get the element with the #chessCanvas on it
+  @ViewChild("trafficCanvas") trafficCanvas: BaseChartDirective; 
 
   constructor( 
     private router: Router, 
@@ -52,12 +70,13 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
   ngOnInit(): void {
     //generate random values for mainChart
+    
     for (var i = 0; i <= this.mainChartElements; i++) {
       //this.mainChartData1.push(this.random(50,200));
       this.mainChartData2.push(this.random(80,100));
       this.mainChartData3.push(65);
     }
-
+    
     this.authService.getUsersOnline().subscribe( userList => {
       let usersList = userList;
       this.onlineUsers = usersList.length;
@@ -99,12 +118,21 @@ export class DashboardComponent implements OnInit, OnDestroy  {
 
     this.dailyTrafficSubscription = this.trafficService.getDailyTraffic().subscribe( oDailyTrafficList => {
       if(oDailyTrafficList){
+          let tmpMainChartData1 = [];
+          
           oDailyTrafficList.forEach( dailyTraffic => {
-            this.mainChartData1.push(Number(dailyTraffic.value));
+            tmpMainChartData1.push(Number(dailyTraffic.value));
           });
+
+          this.mainChartData[0].data = tmpMainChartData1;
+
+          //Redraw Canvas
+          if(this.trafficCanvas !== undefined){
+                this.trafficCanvas.ngOnDestroy();
+                this.trafficCanvas.chart = this.trafficCanvas.getChartBuilder(this.trafficCanvas.ctx);
+          }
       }
     });
-
   }
 
   ngOnDestroy() {
@@ -323,20 +351,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     return Math.floor(Math.random()*(max-min+1)+min);
   }
 
-  public mainChartData:Array<any> = [
-    {
-      data: this.mainChartData1,
-      label: 'Current'
-    },
-    {
-      data: this.mainChartData2,
-      label: 'Previous'
-    },
-    {
-      data: this.mainChartData3,
-      label: 'BEP'
-    }
-  ];
+
   public mainChartLabels:Array<any> = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Thursday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   public mainChartOptions:any = {
     responsive: true,
