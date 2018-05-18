@@ -12,5 +12,6 @@ export const environment = {
     projectId: "firetrix-project-mendiola",
     storageBucket: "",
     messagingSenderId: "31127316738"
-    }  
+  },
+  apiUrl: "https://us-central1-firetrix-project-mendiola.cloudfunctions.net"  
 };

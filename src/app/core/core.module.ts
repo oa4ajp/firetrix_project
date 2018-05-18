@@ -12,6 +12,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../../environments/environment';
 import { AuthService } from './service/auth.service';
+import { CloudService } from './service/cloud.service';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { AuthService } from './service/auth.service';
   providers: [
     /* our own custom services  */
     AuthGuardService,
-    AuthService
+    AuthService,
+    CloudService
   ]
 })
 export class CoreModule {

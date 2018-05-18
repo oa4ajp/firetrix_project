@@ -8,6 +8,7 @@ import { AuthService } from '../core/service/auth.service';
 import { SocialNetworkService } from './services/social-network.service';
 import { TrafficService } from './services/traffic.service';
 import { SalesService } from './services/sales.service';
+
 import { SocialNetwork } from './models/social-network';
 import { IUser } from '../core/models/interface-user';
 import { Traffic } from './models/traffic';

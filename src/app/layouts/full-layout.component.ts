@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../core/service/auth.service';
 import { IUser } from '../core/models/interface-user';
+import { CloudService } from '../core/service/cloud.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ export class FullLayoutComponent implements OnInit {
   public loggedUser: IUser;
 
   
-  constructor(private authService: AuthService) {     
+  constructor(private authService: AuthService, private cloudService: CloudService) {     
   }
 
   ngOnInit(): void {
@@ -44,4 +45,8 @@ export class FullLayoutComponent implements OnInit {
     this.authService.signOut(this.loggedUser);
   }
   
+  public updateSocialNetworks(){
+    this.cloudService.updateSocialNetworks().then();
+  }
+
 }
