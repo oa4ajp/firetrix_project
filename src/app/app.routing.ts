@@ -37,24 +37,8 @@ export const routes: Routes = [
         loadChildren: './components/components.module#ComponentsModule'
       },
       {
-        path: 'icons',
-        loadChildren: './icons/icons.module#IconsModule'
-      },
-      {
         path: 'forms',
         loadChildren: './forms/forms.module#FormsModule'
-      },
-      {
-        path: 'plugins',
-        loadChildren: './plugins/plugins.module#PluginsModule'
-      },
-      {
-        path: 'widgets',
-        loadChildren: './widgets/widgets.module#WidgetsModule'
-      },
-      {
-        path: 'charts',
-        loadChildren: './chartjs/chartjs.module#ChartJSModule'
       }
     ]
   },

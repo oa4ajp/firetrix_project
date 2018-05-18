@@ -6,11 +6,7 @@
     <li class="nav-item">
       <a class="nav-link navbar-toggler" href="#" appSidebarToggler>&#9776;</a>
     </li>
-  </ul>
-  <form class="form-inline b-r-1 px-3 d-md-down-none">
-    <i class="fa fa-search"></i>
-    <input class="form-control" type="text" placeholder="Search...">
-  </form>
+  </ul>  
   <ul class="nav navbar-nav ml-auto">            
     <div class="display-name-container">
       {{userDisplayName}}
@@ -25,19 +21,9 @@
           <strong>Account</strong>
         </div>
 
-        <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="badge badge-info">42</span></a>
-        <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="badge badge-success">42</span></a>
-        <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="badge badge-danger">42</span></a>
-        <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comment<span class="badge badge-warning">42</span></a>
-
-        <div class="dropdown-header text-center">
-          <strong>Settings</strong>
-        </div>
-
         <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
         <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Setting</a>
         <div class="divider"></div>
-        <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a>
         <a class="dropdown-item" (click)="logout()" style="cursor:pointer;"><i class="fa fa-lock"></i> Logout</a>
       </div>
     </li>
@@ -52,124 +38,8 @@
           <span>Dashboard</span>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-speedometer"></i>Dashboard</a>
         </li>
-
-        <li class="divider"></li>
-        <li class="nav-title text-center">
-          <span>UI Elements</span>
-        </li>
-        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-          <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-puzzle"></i> Components</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/buttons']"><i class="icon-puzzle"></i> Buttons</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/social-buttons']"><i class="icon-puzzle"></i> Social Buttons</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/cards']"><i class="icon-puzzle"></i> Cards</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/forms']"><i class="icon-puzzle"></i> Forms</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/modals']"><i class="icon-puzzle"></i> Modals</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/switches']"><i class="icon-puzzle"></i> Switches</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/tables']"><i class="icon-puzzle"></i> Tables</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/components/tabs']"><i class="icon-puzzle"></i> Tabs</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-          <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-star"></i> Icons</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/icons/font-awesome']"><i class="icon-star"></i> Font Awesome</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/icons/glyphicons']"><i class="icon-star"></i> Glyphicons</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/icons/glyphicons-filetypes']"><i class="icon-star"></i> Filetypes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/icons/glyphicons-social']"><i class="icon-star"></i> Glyphicons Social</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/icons/simple-line-icons']"><i class="icon-star"></i> Simple Line Icons</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-          <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-note"></i> Forms</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/forms/basic-forms']"><i class="icon-note"></i> Basic Forms</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/forms/advanced-forms']"><i class="icon-note"></i> Advanced Forms</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-          <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-energy"></i> Plugins</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/plugins/calendar']"><i class="icon-calendar"></i> Calendar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/plugins/datatable']"><i class="icon-menu"></i> DataTable</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/plugins/draggable-cards']"><i class="icon-cursor-move"></i> Draggable Cards</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/plugins/loading-buttons']"><i class="icon-cursor"></i> Loading Buttons</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/plugins/notifications']"><i class="icon-info"></i> Notifications</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/plugins/spinners']"><i class="fa fa-spinner"></i> Spinners</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/widgets']"><i class="icon-calculator"></i> Widgets <span class="badge badge-info">NEW</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/charts']"><i class="icon-pie-chart"></i> Charts</a>
-        </li>
-        <li class="divider"></li>
-        <li class="nav-title text-center">
-          <span>Extras</span>
-        </li>
-        <li class="nav-item nav-dropdown" routerLinkActive="open" appNavDropdown>
-          <a class="nav-link nav-dropdown-toggle" href="#" appNavDropdownToggle><i class="icon-star"></i> Pages</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/login']"><i class="icon-star"></i> Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/register']"><i class="icon-star"></i> Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/404']"><i class="icon-star"></i> Error 404</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/pages/500']"><i class="icon-star"></i> Error 500</a>
-            </li>
-          </ul>
-        </li>      
-        <li class="divider m-2"></li>
         <li class="nav-title text-center">
           <span>Labels</span>
         </li>
@@ -188,12 +58,6 @@
 
   <!-- Main content -->
   <main class="main">
-
-    <!-- Breadcrumb -->
-    <ol class="breadcrumb mb-0">
-      <app-breadcrumbs></app-breadcrumbs>
-    </ol>
-
     <div class="container-fluid">
       <router-outlet></router-outlet>
     </div>
@@ -202,8 +66,8 @@
 </div>
 
 <footer class="app-footer">
-  <a href="https://genesisui.com">Firetrix</a> &copy; 2018 creativeLabs.
+  <a href="https://www.belatrixsf.com">Firetrix</a> &copy; 2018 Belatrix.
   <span class="float-right">
-    Powered by <a href="https://genesisui.com">GenesisUI</a>
+    Powered by <a href="http://www.belatrixsf.com">Firetrix</a>
   </span>
 </footer>
