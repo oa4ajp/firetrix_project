@@ -13,6 +13,7 @@ import { switchMap } from 'rxjs/operators';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/elementAt';
+import { Roles } from '../models/roles';
 
 @Injectable()
 export class AuthService {
@@ -137,9 +138,11 @@ export class AuthService {
     const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
     
     let dbDisplayName = null;
+    let rolesTemp: Roles[] = [];
     userRef.valueChanges().first().subscribe(dbUser => {
-      if(dbUser){
+      if(dbUser){        
         dbDisplayName = dbUser['displayName'];
+        rolesTemp = dbUser['roles'];
       }            
 
       const data: IUser = {
@@ -147,7 +150,8 @@ export class AuthService {
         email: user.email || null,
         displayName: user.displayName || dbDisplayName || 'nameless user',
         photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
-        online: true
+        online: true,
+        roles: rolesTemp || { friend: true }
       };
       userRef.set(data);
 

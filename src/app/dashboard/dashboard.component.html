@@ -512,7 +512,7 @@
                 <th>User</th>
                 <th class="text-center">Country</th>
                 <th>Usage</th>
-                <th class="text-center">Payment Method</th>
+                <th class="text-center">Roles</th>
                 <th>Activity</th>
               </tr>
             </thead>
@@ -547,7 +547,16 @@
                   </div>
                 </td>
                 <td class="text-center">
-                  <i class="fa fa-cc-mastercard" style="font-size:24px"></i>
+                    |
+                    <span *ngIf="user.roles.friend">            
+                      <b>Friend</b> |
+                    </span>
+                    <span *ngIf="user.roles.guest">            
+                      <b>Guest</b> |
+                    </span>
+                    <span *ngIf="user.roles.admin">            
+                      <b>Admin</b> |
+                    </span>                     
                 </td>
                 <td>
                   <div class="small text-muted">Last login</div>
@@ -584,7 +593,7 @@
                   </div>
                 </td>
                 <td class="text-center">
-                  <i class="fa fa-cc-mastercard" style="font-size:24px"></i>
+                  | <b>Friend</b> |
                 </td>
                 <td>
                   <div class="small text-muted">Last login</div>
@@ -622,7 +631,7 @@
                   </div>
                 </td>
                 <td class="text-center">
-                  <i class="fa fa-cc-visa" style="font-size:24px"></i>
+                  | <b>Friend</b> |
                 </td>
                 <td>
                   <div class="small text-muted">Last login</div>
@@ -659,7 +668,7 @@
                   </div>
                 </td>
                 <td class="text-center">
-                  <i class="fa fa-paypal" style="font-size:24px"></i>
+                 | <b>Friend</b> |
                 </td>
                 <td>
                   <div class="small text-muted">Last login</div>
@@ -696,50 +705,13 @@
                   </div>
                 </td>
                 <td class="text-center">
-                  <i class="fa fa-google-wallet" style="font-size:24px"></i>
+                  | <b>Guest</b> |
                 </td>
                 <td>
                   <div class="small text-muted">Last login</div>
                   <strong>Last week</strong>
                 </td>
-              </tr>
-              <tr>
-                <td class="text-center">
-                  <div class="avatar">
-                    <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com" src="assets/img/avatars/6.jpg">
-                    <span class="avatar-status badge-danger"></span>
-                  </div>
-                </td>
-                <td>
-                  <div>Friderik Dávid</div>
-                  <div class="small text-muted">
-                    <span>New</span> | Registered: Jan 1, 2015
-                  </div>
-                </td>
-                <td class="text-center">
-                  <img src="assets/img/flags/Poland.png" alt="Poland" style="height:24px;" src="assets/img/flags/Poland.png">
-                </td>
-                <td>
-                  <div class="clearfix">
-                    <div class="float-left">
-                      <strong>43%</strong>
-                    </div>
-                    <div class="float-right">
-                      <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
-                    </div>
-                  </div>
-                  <div class="progress progress-xs">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <i class="fa fa-cc-amex" style="font-size:24px"></i>
-                </td>
-                <td>
-                  <div class="small text-muted">Last login</div>
-                  <strong>Yesterday</strong>
-                </td>
-              </tr>
+              </tr>              
             </tbody>
           </table>
         </div>

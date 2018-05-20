@@ -24,7 +24,27 @@ export class CloudService {
     }
 
     public updateSocialNetworks(){
-        return this.http.get(`${this.url}/updateSocialNetworks`).toPromise();
+        return this.http.get(`${this.url}/updateSocialNetworks`);
+    }
+
+    public updateDailyTraffic(){
+        return this.http.get(`${this.url}/updateDailyTraffic`);
+    }
+    
+    public updateTraffic(){
+        return this.http.get(`${this.url}/updateTraffic`);
+    }    
+
+    public updateSalesTraffic(){
+        return this.http.get(`${this.url}/updateSalesTraffic`);
+    }
+    
+    public updateProducts(){
+        return this.http.get(`${this.url}/updateProducts`);
+    }
+
+    public updateSalesByDay(){
+        return this.http.get(`${this.url}/updateSalesByDay`);
     }
     
 }
