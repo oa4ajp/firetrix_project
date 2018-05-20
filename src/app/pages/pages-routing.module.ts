@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { p404Component } from './404.component';
 import { p500Component } from './500.component';
-import { LoginComponent } from './login.component';
-import { RegisterComponent } from './register.component';
 
 const routes: Routes = [
   {
@@ -25,20 +23,6 @@ const routes: Routes = [
         component: p500Component,
         data: {
           title: 'Page 500'
-        }
-      },
-      {
-        path: 'login',
-        component: LoginComponent,
-        data: {
-          title: 'Login Page'
-        }
-      },
-      {
-        path: 'register',
-        component: RegisterComponent,
-        data: {
-          title: 'Register Page'
         }
       }
     ]

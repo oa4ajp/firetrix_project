@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 //Layouts
 import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
-import { LoginComponent } from './login/login.component';
 import { AuthGuardService } from './core/service/auth-guard.service';
 
 export const routes: Routes = [

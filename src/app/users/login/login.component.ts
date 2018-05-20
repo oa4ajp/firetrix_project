@@ -1,8 +1,8 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageBox } from '../core/models/message-box';
-import { Constants } from '../core/constants/constants';
-import { AuthService } from '../core/service/auth.service';
+import { MessageBox } from '../../core/models/message-box';
+import { Constants } from '../../core/constants/constants';
+import { AuthService } from '../../core/service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -96,6 +96,10 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
   private afterSignIn() {
     // Do after login stuff here, such router redirects, toast messages, etc.
     this.router.navigate(['dashboard']);
-  }  
+  }
+
+  public registerUser(){
+    this.router.navigate(['register']);
+  }
 
 }
