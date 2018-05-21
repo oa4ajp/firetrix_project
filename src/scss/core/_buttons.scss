@@ -97,12 +97,7 @@ button {
   $color: $facebook;
 
   background: $color;
-  &::before {
-    content: "\f09a";
-    background: darken($color, 5%);
-
-  }
-
+  
   &:hover {
     background: darken($color, 5%);
 
@@ -116,11 +111,6 @@ button {
   $color: $twitter;
 
   background: $color;
-  &::before {
-    content: "\f099";
-    background: darken($color, 5%);
-
-  }
 
   &:hover {
     background: darken($color, 5%);
@@ -135,11 +125,6 @@ button {
   $color: $linkedin;
 
   background: $color;
-  &::before {
-    content: "\f0e1";
-    background: darken($color, 5%);
-
-  }
 
   &:hover {
     background: darken($color, 5%);
@@ -211,11 +196,6 @@ button {
   $color: $github;
 
   background: $color;
-  &::before {
-    content: "\f09b";
-    background: darken($color, 5%);
-
-  }
 
   &:hover {
     background: darken($color, 5%);
@@ -344,11 +324,6 @@ button {
   $color: $google-plus;
 
   background: $color;
-  &::before {
-    content: "\f0d5";
-    background: darken($color, 5%);
-
-  }
 
   &:hover {
     background: darken($color, 5%);

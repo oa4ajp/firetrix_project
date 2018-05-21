@@ -12,7 +12,7 @@
           </button>
         </div>
         <div class="button-container">
-          <button (click)="signInWithGithub()" class="button btn-social btn-github" disabled>
+          <button (click)="signInWithGithub()" class="button btn-social btn-github">
             <i class="fa fa-github fa-lg"></i>&nbsp;&nbsp;Connect GitHub
           </button>
         </div>
@@ -39,8 +39,8 @@
         Sign In to your account
       </div>
       <div class="login-item">
-        <span class="input-group-addon"><i class="icon-user"></i></span>
-        <input type="text" class="form-control" placeholder="Username" [(ngModel)]="user.username">
+        <span class="input-group-addon">@</span>
+        <input type="text" class="form-control" placeholder="Email" [(ngModel)]="user.username">
       </div>
       <div class="login-item">
         <span class="input-group-addon"><i class="icon-lock"></i></span>
@@ -55,7 +55,7 @@
         </button>
       </div>
       <div class="login-item__register-link">        
-        <a class="nav-link" (click)="registerUser()" style="cursor:pointer;">
+        <a class="page-nav-link" (click)="registerUser()" style="cursor:pointer;">
           Don't have an account? Sign up
         </a>        
       </div>      

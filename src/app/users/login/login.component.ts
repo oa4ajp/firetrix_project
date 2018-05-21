@@ -32,7 +32,6 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
 
   login() {
     if(this.user.username.trim() === "" || this.user.password.trim() === "") {
-      this.showMessage = true;
       this.message = Constants.MESSAGE_USER_AND_PWD_REQUIRED;
       this.messageType = 'error-login';
       this.showMessage = true;
@@ -62,7 +61,7 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
   }
 
   private handleError(error: Error) {
-    console.error(error);
+    //console.error(error);
     this.isSpinnerVisible = false; 
     this.message = error.message;
     this.messageType = 'error-login';
@@ -86,11 +85,20 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
   }
 
   public signInWithGoogle() {
-    this.authService.googleLogin().then(() => this.afterSignIn());
+    this.authService.googleLogin()
+    .then(() => this.afterSignIn())
+    .catch((error) => this.handleError(error) );
   }
 
   public signInWithFacebook() {
-    this.authService.facebookLogin().then(() => this.afterSignIn());
+    this.authService.facebookLogin().then(() => this.afterSignIn())
+    .catch((error) => this.handleError(error) );
+  }
+
+  public signInWithGithub(){
+    this.authService.githubLogin()
+    .then(() => this.afterSignIn())
+    .catch((error) => this.handleError(error) );
   }
 
   private afterSignIn() {
@@ -101,5 +109,6 @@ export class LoginComponent extends MessageBox implements OnInit, DoCheck {
   public registerUser(){
     this.router.navigate(['register']);
   }
+
 
 }

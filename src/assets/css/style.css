@@ -12504,9 +12504,6 @@ ul.icons-list {
 
 .btn-facebook {
   background: #3b5998; }
-  .btn-facebook::before {
-    content: "\f09a";
-    background: #344e86; }
   .btn-facebook:hover {
     background: #344e86; }
     .btn-facebook:hover::before {
@@ -12514,9 +12511,6 @@ ul.icons-list {
 
 .btn-twitter {
   background: #00aced; }
-  .btn-twitter::before {
-    content: "\f099";
-    background: #0099d4; }
   .btn-twitter:hover {
     background: #0099d4; }
     .btn-twitter:hover::before {
@@ -12524,9 +12518,6 @@ ul.icons-list {
 
 .btn-linkedin {
   background: #4875b4; }
-  .btn-linkedin::before {
-    content: "\f0e1";
-    background: #4169a2; }
   .btn-linkedin:hover {
     background: #4169a2; }
     .btn-linkedin:hover::before {
@@ -12564,9 +12555,6 @@ ul.icons-list {
 
 .btn-github {
   background: #4183c4; }
-  .btn-github::before {
-    content: "\f09b";
-    background: #3876b4; }
   .btn-github:hover {
     background: #3876b4; }
     .btn-github:hover::before {
@@ -12634,9 +12622,6 @@ ul.icons-list {
 
 .btn-google-plus {
   background: #bb4b39; }
-  .btn-google-plus::before {
-    content: "\f0d5";
-    background: #a74333; }
   .btn-google-plus:hover {
     background: #a74333; }
     .btn-google-plus:hover::before {

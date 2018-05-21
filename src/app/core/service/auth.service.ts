@@ -70,13 +70,12 @@ export class AuthService {
     return this.oAuthLogin(provider);
   }
 
-  private oAuthLogin(provider: firebase.auth.AuthProvider) {
+  private oAuthLogin(provider: firebase.auth.AuthProvider) {    
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
         //this.notify.update('Welcome to Firestarter!!!', 'success');
         return this.updateUserData(credential.user);
-      })
-      .catch((error) => this.handleError(error) );
+      });
   }
 
   //// Anonymous Auth ////
@@ -94,13 +93,23 @@ export class AuthService {
   }
 
   //// Email/Password Auth ////
-  emailSignUp(email: string, password: string) {
+  emailSignUp(displayName:string, email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
-        //this.notify.update('Welcome to Firestarter!!!', 'success');
-        return this.updateUserData(user); // if using firestore
+        const userData: IUser = {
+          uid: user.uid,
+          email: user.email || null,
+          displayName: displayName,
+          photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
+          online: true,
+          roles:  { }
+        };
+        this.createUserData(userData); // if using firestore
+
+        return new Promise<boolean>((resolve) => {
+          resolve(true);
+        });
       })
-      .catch((error) => this.handleError(error) );
   }
 
   emailLogin(email: string, password: string) {
@@ -133,13 +142,24 @@ export class AuthService {
   }
 
   // Sets user data to firestore after succesful login
+  public createUserData(user: IUser) {
+    const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
+
+    user.photoURL = user.photoURL || 'https://goo.gl/Fz9nrQ';
+    user.online = false;
+    user.roles = { friend: true };
+
+    userRef.set(user);
+
+  }
+
   public updateUserData(user: IUser) {
 
     const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
     
     let dbDisplayName = null;
     let rolesTemp: Roles[] = [];
-    userRef.valueChanges().first().subscribe(dbUser => {
+    userRef.valueChanges().first().toPromise().then(dbUser => {
       if(dbUser){        
         dbDisplayName = dbUser['displayName'];
         rolesTemp = dbUser['roles'];
