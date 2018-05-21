@@ -9,6 +9,7 @@ import { IUser } from '../models/interface-user'
 //import { NotifyService } from './notify.service';
 
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { switchMap } from 'rxjs/operators';
 import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/do';
@@ -17,9 +18,8 @@ import { Roles } from '../models/roles';
 
 @Injectable()
 export class AuthService {
-
+  private messageLoginCompletedSubject = new Subject<string>();
   user: Observable<IUser | null>;
-  userId: string; // current user uid
 
   constructor(private afAuth: AngularFireAuth,
               private rtdb: AngularFireDatabase,
@@ -48,6 +48,10 @@ export class AuthService {
 
   }
 
+  getMessageLoginCompletedSubject(): Observable<any> {
+    return this.messageLoginCompletedSubject.asObservable();
+  }
+
   ////// OAuth Methods /////
 
   googleLogin() {
@@ -74,7 +78,29 @@ export class AuthService {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
         //this.notify.update('Welcome to Firestarter!!!', 'success');
-        return this.updateUserData(credential.user);
+
+        let displayName = '';
+        let providerId = credential.credential.providerId;
+
+        switch(providerId){
+          case "github.com":
+            displayName = credential.additionalUserInfo.username;          
+            break;
+          default:
+            displayName = credential.user.displayName;          
+            break;    
+        }        
+
+        const userData: IUser = {
+            uid: credential.user.uid,
+            email: credential.user.email || null,
+            displayName: displayName,
+            photoURL:  credential.user.photoURL || 'https://goo.gl/Fz9nrQ',
+            online: true,
+            roles:  { }
+         };
+
+        return this.updateUserData(userData);
       });
   }
 
@@ -174,6 +200,8 @@ export class AuthService {
         roles: rolesTemp || { friend: true }
       };
       userRef.set(data);
+      
+      this.messageLoginCompletedSubject.next("");
 
     });
   } 
