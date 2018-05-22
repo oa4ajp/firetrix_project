@@ -13,6 +13,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { environment } from '../../environments/environment';
 import { AuthService } from './service/auth.service';
 import { CloudService } from './service/cloud.service';
+import { RandomDataService } from './service/random-data.service';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { CloudService } from './service/cloud.service';
     /* our own custom services  */
     AuthGuardService,
     AuthService,
-    CloudService
+    CloudService,
+    RandomDataService
   ]
 })
 export class CoreModule {

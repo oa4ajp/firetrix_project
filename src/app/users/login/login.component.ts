@@ -5,6 +5,7 @@ import { Constants } from '../../core/constants/constants';
 import { AuthService } from '../../core/service/auth.service';
 import * as firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs/Rx';
+import { RandomDataService } from '../../core/service/random-data.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent extends MessageBox implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private randDataService: RandomDataService
   ) 
   {
     super();
@@ -33,6 +35,9 @@ export class LoginComponent extends MessageBox implements OnInit, OnDestroy {
     this.subscriptionMessageLoginCompleted = this.authService.getMessageLoginCompletedSubject().subscribe(loginCompletedMessage => {            
       this.afterSignIn();
     });
+
+    this.randDataService.generateRandomData();
+
   }
 
   public ngOnDestroy(): void {
