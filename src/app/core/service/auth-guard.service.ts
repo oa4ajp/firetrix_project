@@ -4,6 +4,8 @@ import { AuthService } from './auth.service';
 import { Observable } from 'rxjs/Observable';
 import { map, take, tap } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/take';
+
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
@@ -11,19 +13,18 @@ export class AuthGuardService implements CanActivate {
     }
 
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return this.authService.user.map(user => {
-            if (!user) {
-                console.log('access denied');
-                //this.notify.update('You must be logged in!', 'error');
-                this.router.navigate(['login']);
-                return false;
-            }else{
-                return true;
-            }
-        }).catch(() => {
-            this.router.navigate(['login']);
-            return Observable.of(false);
-        });
+        if (!this.authService.authenticated) {
+            return this.authService.currentUserObservable
+                .take(1)
+                .map(user => !!user)
+                .do(loggedIn => {
+                    if (!loggedIn) {
+                        console.log("auth-guard: access denied")
+                        this.router.navigate(['login']);
+                    }
+                })
+        }else{
+            return true;
+        }
     }
-
 }

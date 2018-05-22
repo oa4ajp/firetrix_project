@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../core/service/auth.service';
 import { IUser } from '../core/models/interface-user';
 import { CloudService } from '../core/service/cloud.service';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './full-layout.component.html'
 })
-export class FullLayoutComponent implements OnInit {
+export class FullLayoutComponent implements OnInit, OnDestroy {
   public userDisplayName: string = '';
   public userPhotoUrl: string = '';
   public disabled:boolean = false;
   public status:{isopen:boolean} = {isopen: false};  
   public loggedUser: IUser;
+  public subscriptionUser: Subscription;
   
   constructor(private authService: AuthService, private cloudService: CloudService) {     
   }
@@ -21,7 +23,7 @@ export class FullLayoutComponent implements OnInit {
     this.userDisplayName = '';
     this.userPhotoUrl = '';
 
-    this.authService.user.subscribe(user => {
+    this.subscriptionUser = this.authService.user.subscribe(user => {
       if(user){
         this.userDisplayName = `Welcome, ${user.displayName}`;
         this.userPhotoUrl = user.photoURL;
@@ -29,6 +31,10 @@ export class FullLayoutComponent implements OnInit {
       }
     });
   }
+
+  public ngOnDestroy(): void {
+    this.subscriptionUser.unsubscribe();
+  }    
 
   public toggled(open:boolean):void {
     console.log('Dropdown is now: ', open);

@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as firebase from 'firebase/app';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth,  } from 'angularfire2/auth';
 import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 
 import { IUser } from '../models/interface-user'
-//import { NotifyService } from './notify.service';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -20,6 +19,9 @@ import { Roles } from '../models/roles';
 export class AuthService {
   private messageLoginCompletedSubject = new Subject<string>();
   user: Observable<IUser | null>;
+  userId: string = null;
+
+  authState: any = null;
 
   constructor(private afAuth: AngularFireAuth,
               private rtdb: AngularFireDatabase,
@@ -29,12 +31,20 @@ export class AuthService {
     this.user = this.afAuth.authState
       .switchMap((user) => {
         if (user) {
-          return this.rtdb.object(`users/${user.uid}`).valueChanges();
+          const uid: string = this.getUserId(user);          
+          return this.rtdb.object(`users/${uid}`).valueChanges();
+          
         } else {
           return Observable.of(null);
+
         }
       });
 
+      this.afAuth.authState.subscribe((auth) => {
+        this.authState = auth;
+      });
+
+      /*
       this.afAuth.authState
       .do(user => {
         if (user) {
@@ -43,9 +53,13 @@ export class AuthService {
         }
       })
       .subscribe();
+      */
 
       this.getUsersOnline();
+  }
 
+  get currentUserObservable(): any {
+    return this.afAuth.authState;
   }
 
   getMessageLoginCompletedSubject(): Observable<any> {
@@ -56,6 +70,7 @@ export class AuthService {
 
   googleLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('email');
     return this.oAuthLogin(provider);
   }
 
@@ -76,29 +91,37 @@ export class AuthService {
 
   private oAuthLogin(provider: firebase.auth.AuthProvider) {    
     return this.afAuth.auth.signInWithPopup(provider)
-      .then((credential) => {
-        //this.notify.update('Welcome to Firestarter!!!', 'success');
+      .then((credential) => {        
 
+        let email = '';
+        let photoURL = '';
         let displayName = '';
         let providerId = credential.credential.providerId;
 
         switch(providerId){
           case "github.com":
+            email = credential.user.providerData[0].email;
+            photoURL = credential.user.photoURL;
             displayName = credential.additionalUserInfo.username;          
             break;
-          default:
-            displayName = credential.user.displayName;          
-            break;    
-        }        
+
+          case "google.com":
+            email = credential.additionalUserInfo.profile.email;
+            photoURL = credential.user.photoURL;
+            displayName = credential.user.displayName;   
+            break;          
+        }
+
+        const uid: string = this.encondeFireBaseKey(email);
 
         const userData: IUser = {
-            uid: credential.user.uid,
-            email: credential.user.email || null,
+            uid: uid,
+            email: email || null,
             displayName: displayName,
-            photoURL:  credential.user.photoURL || 'https://goo.gl/Fz9nrQ',
+            photoURL: photoURL || 'https://goo.gl/Fz9nrQ',
             online: true,
             roles:  { }
-         };
+         };        
 
         return this.updateUserData(userData);
       });
@@ -107,8 +130,7 @@ export class AuthService {
   //// Anonymous Auth ////
   anonymousLogin() {
     return this.afAuth.auth.signInAnonymously()
-      .then((user) => {
-        //this.notify.update('Welcome to Firestarter!!!', 'success');
+      .then((user) => {        
         return this.updateUserData(user); // if using firestore
       })
       .catch((error) => {
@@ -120,10 +142,12 @@ export class AuthService {
 
   //// Email/Password Auth ////
   emailSignUp(displayName:string, email: string, password: string) {
+    const uid: string = this.encondeFireBaseKey(email);
+    
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((user) => {
         const userData: IUser = {
-          uid: user.uid,
+          uid: uid,
           email: user.email || null,
           displayName: displayName,
           photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
@@ -152,10 +176,19 @@ export class AuthService {
       */
   }
 
-  signOut(user: IUser) {
-    this.afAuth.auth.signOut().then(() => {        
-      const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
+  signOut(user: IUser) {      
+    this.afAuth.auth.signOut().then(() => {    
+      let uid: string =  null; 
+      if(user.email == null){
+        //Anonymous Login
+        uid = user.uid;
+      }else{
+        uid = this.encondeFireBaseKey(user.email);
+      }
+
+      const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${uid}`);
       userRef.update({online: false});
+      this.userId = null;
 
       this.router.navigate(['login']);
     });
@@ -163,47 +196,67 @@ export class AuthService {
   
   // If error, console log and notify user
   private handleError(error: Error) {
-    console.error(error);
-    //this.notify.update(error.message, 'error');
+    console.error(error);    
   }
 
   // Sets user data to firestore after succesful login
   public createUserData(user: IUser) {
-    const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
+
+    const uid: string = this.encondeFireBaseKey(user.email);
+
+    const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${uid}`);
 
     user.photoURL = user.photoURL || 'https://goo.gl/Fz9nrQ';
-    user.online = false;
+    user.online = true; //Teh user is redirected to dashboard as Logged In
     user.roles = { friend: true };
 
     userRef.set(user);
 
+    this.userId =  uid;     
+
   }
 
-  public updateUserData(user: IUser) {
+  public updateUserData(user: IUser) {    
+    const listRef = this.rtdb.list<IUser>('users');
+          
+    listRef.valueChanges<IUser>().first().map( users => 
+        users.filter(userTmp => userTmp.email === user.email ) 
+    ).toPromise().then( dbUsers => {
+        let dbUser: IUser;
+        //console.log(dbUsers);
+        if(dbUsers.length == 0){
+          dbUser = user;
+        }else{
+          dbUser = dbUsers[0];
+        }                        
 
-    const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
-    
-    let dbDisplayName = null;
-    let rolesTemp: Roles[] = [];
-    userRef.valueChanges().first().toPromise().then(dbUser => {
-      if(dbUser){        
-        dbDisplayName = dbUser['displayName'];
-        rolesTemp = dbUser['roles'];
-      }            
+        let uid: string =  ''; 
+        if(dbUser.email == null){
+          //Anonymous Login
+          uid = dbUser.uid;
+        }else{
+          uid = this.encondeFireBaseKey(dbUser.email);
+        }
+       
+        const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${uid}`);
 
-      const data: IUser = {
-        uid: user.uid,
-        email: user.email || null,
-        displayName: user.displayName || dbDisplayName || 'nameless user',
-        photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
-        online: true,
-        roles: rolesTemp || { friend: true }
-      };
-      userRef.set(data);
-      
-      this.messageLoginCompletedSubject.next("");
+        let displayName: string = user.displayName != null ?  user.displayName : dbUser.displayName;
 
+        const data: IUser = {
+          uid: uid,
+          email: user.email || null,
+          displayName: displayName || 'nameless user',
+          photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
+          online: true,
+          roles: dbUser.roles || { friend: true }
+        };
+        userRef.set(data);  
+
+        this.userId = uid;     
+
+        this.messageLoginCompletedSubject.next("");
     });
+
   } 
 
   public getUsersOnline(){
@@ -240,5 +293,41 @@ export class AuthService {
       .onDisconnect()
       .update({online: false})
   }  
+
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  private encondeFireBaseKey(key: string){
+    return key.replace(/\%/g, '%25')
+      .replace(/\./g, '%2E')
+      .replace(/\#/g, '%23')
+      .replace(/\$/g, '%24')
+      .replace(/\//g, '%2F')
+      .replace(/\[/g, '%5B')
+      .replace(/\]/g, '%5D');
+  }
+
+  private decodeFireBaseKey(key: string){
+    //todo
+  }  
+
+  private getProviderEmail(user: any){
+    let email = '';
+    email = user.providerData[0].email;        
+    return email;
+  }
+
+  private getUserId(user: any){
+    let userId = '';
+
+    if(user.providerData.length == 0){
+      userId = user.uid;
+    }else{
+      userId = this.encondeFireBaseKey(this.getProviderEmail(user));
+    }  
+    return userId;
+  }
 
 }
