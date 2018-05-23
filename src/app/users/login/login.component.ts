@@ -6,6 +6,7 @@ import { AuthService } from '../../core/service/auth.service';
 import * as firebase from 'firebase/app';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { RandomDataService } from '../../core/service/random-data.service';
+import { IRandomData } from '../../core/models/interface-random-data';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,8 @@ export class LoginComponent extends MessageBox implements OnInit, OnDestroy {
   centerErrorMessage: boolean;
   isSpinnerVisible: boolean;
   public subscriptionMessageLoginCompleted: Subscription;
+  public subscriptionRandData: Subscription;
+  public randomData: IRandomData;
 
   constructor(
     private router: Router,
@@ -27,7 +30,8 @@ export class LoginComponent extends MessageBox implements OnInit, OnDestroy {
     super();
     this.user.username = '';
     this.user.password = '';
-    this.isSpinnerVisible = false;    
+    this.isSpinnerVisible = false;
+    this.randomData = {numberList: [], dateList: [], booleanList: []};
   }
 
   ngOnInit() {    
@@ -38,10 +42,15 @@ export class LoginComponent extends MessageBox implements OnInit, OnDestroy {
 
     this.randDataService.generateRandomData();
 
+    this.subscriptionRandData = this.randDataService.randomData.subscribe(data => {
+      this.randomData = data;
+    });    
+
   }
 
   public ngOnDestroy(): void {
     this.subscriptionMessageLoginCompleted.unsubscribe();
+    this.subscriptionRandData.unsubscribe();
   }  
 
   login() {

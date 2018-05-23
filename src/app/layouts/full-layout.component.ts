@@ -36,16 +36,6 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
     this.subscriptionUser.unsubscribe();
   }    
 
-  public toggled(open:boolean):void {
-    console.log('Dropdown is now: ', open);
-  }
-
-  public toggleDropdown($event:MouseEvent):void {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.status.isopen = !this.status.isopen;
-  }
-
   logout() {
     this.authService.signOut(this.loggedUser);
   }

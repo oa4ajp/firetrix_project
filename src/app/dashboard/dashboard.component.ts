@@ -17,9 +17,13 @@ import { SalesByDay } from './models/sales-by-day';
 import { SalesByGender } from './models/sales-by-gender';
 import { SalesByOrigin } from './models/sales-by-origin';
 import { Product }       from './models/product'
+import { RandomDataService } from '../core/service/random-data.service';
+import { IRandomData } from '../core/models/interface-random-data';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 @Component({
-  templateUrl: 'dashboard.component.html'
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy  {
   public brandPrimary:string =  '#20a8d8';
@@ -59,7 +63,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   public organicsValue: string = '0';
   public ctrValue: string = '0';
   public bounceRateValue: string = '0';
-  
+
   public mainChartData:Array<any> = [
     {
       data: this.mainChartData1,
@@ -73,17 +77,24 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       data: this.mainChartData3,
       label: 'BEP'
     }
-  ];
+  ];  
 
   // get the element with the #chessCanvas on it
   @ViewChild("trafficCanvas") trafficCanvas: BaseChartDirective; 
+
+  public subscriptionRandomData: Subscription;
+  //public subscriptionAnonymousRandData: Subscription;
+  public randomData: IRandomData;
+  public subscriptionUser: Subscription;
+  public loggedUser: IUser;
 
   constructor( 
     private router: Router, 
     private authService: AuthService ,
     private socialNetworkService: SocialNetworkService,
     private trafficService: TrafficService,
-    private salesService: SalesService
+    private salesService: SalesService,
+    private randDataService: RandomDataService
   ) { 
     this.faceBook = new SocialNetwork();
     this.googlePlus = new  SocialNetwork();
@@ -94,11 +105,36 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.salesTrafficList = [];
     this.salesByGender = new SalesByGender();
     this.productsList = [];
+    this.randomData = {numberList: [], dateList: [], booleanList: []};
+    this.loggedUser = {} as IUser;
   }
 
   ngOnInit(): void {
     //generate random values for mainChart
     
+    this.subscriptionUser = this.authService.user.first().subscribe(user => {
+      if(user){ 
+
+          this.loggedUser = user;
+
+          this.subscriptionRandomData = this.randDataService.randomData.subscribe(data => {            
+
+            if(user.email == null){    
+              //Anonymous User
+              const anonymousData: IRandomData = {
+                  numberList: data.numberList.slice(0,1),
+                  dateList: data.dateList.slice(0,1),
+                  booleanList: data.booleanList.slice(0,1)        
+              };  
+              this.randomData = anonymousData;
+            }else{
+              //Logged User    
+              this.randomData = data;
+            }            
+          });
+      }
+    });
+
     for (var i = 0; i <= this.mainChartElements; i++) {
       //this.mainChartData1.push(this.random(50,200));
       this.mainChartData2.push(this.random(80,100));
@@ -239,6 +275,8 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.salesByGenderSubscription.unsubscribe();
     this.salesByOriginSubscription.unsubscribe();
     this.productsSubscription.unsubscribe();
+    this.subscriptionUser.unsubscribe();
+    this.subscriptionRandomData.unsubscribe();
   }  
 
   //convert Hex to RGBA
@@ -665,6 +703,11 @@ export class DashboardComponent implements OnInit, OnDestroy  {
         'width': percentage + '%'
     };
     return styles;
+  }
+
+  public updateRandomData(){    
+    this.authService.updateButtonClicks(this.loggedUser);
+    this.randDataService.generateRandomData();
   }
 
 }

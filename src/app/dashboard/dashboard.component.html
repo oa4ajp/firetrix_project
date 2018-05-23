@@ -1,9 +1,17 @@
 <div class="animated fadeIn">
-  <div class="row">&nbsp;</div>
+  <div class="row">
+    <div class="col-sm-6 col-lg-3">
+      <div class="random-button-container">
+        <button type="button" class="btn btn-primary" (click)="updateRandomData()">
+          <i class="icon-refresh"></i> &nbsp;Update Random Data
+          </button>
+      </div>      
+    </div>    
+  </div>
   <div class="row">
     <div class="col-sm-6 col-lg-3">
       <div class="card card-inverse card-primary">
-        <div class="card-block pb-0">
+        <div class="card-block pb-0" style="height:70px;">
           <div class="btn-group float-right" dropdown placement="bottom right">
             <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
               <i class="icon-settings"></i>
@@ -14,7 +22,7 @@
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </div>
-          <h4 class="mb-0">{{onlineUsers}}</h4>
+          <h5 class="mb-0">{{onlineUsers}}</h5>
           <p>Members online</p>
         </div>
         <div class="chart-wrapper px-3" style="height:70px;">
@@ -32,81 +40,38 @@
     </div><!--/.col-->
     <div class="col-sm-6 col-lg-3">
       <div class="card card-inverse card-info">
-        <div class="card-block pb-0">
-          <button type="button" class="btn btn-transparent p-0 float-right">
-            <i class="icon-location-pin"></i>
-          </button>
-          <h4 class="mb-0">{{onlineUsers}}</h4>
-          <p>Members online</p>
+        <div class="card-block pb-0 random-title">
+          <h5 class="mb-0">Random Numbers</h5>
         </div>
-        <div class="chart-wrapper px-3" style="height:70px;">
-          <canvas baseChart class="chart"
-          [datasets]="lineChart2Data"
-          [labels]="lineChart2Labels"
-          [options]="lineChart2Options"
-          [colors]="lineChart2Colours"
-          [legend]="lineChart2Legend"
-          [chartType]="lineChart2Type"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
+        <div class="chart-wrapper px-3" style="height:80px;">        
+          <div *ngFor="let number of randomData.numberList" class="random-value-container">
+            {{number}}  
+          </div>
         </div>
       </div>
     </div><!--/.col-->
     <div class="col-sm-6 col-lg-3">
       <div class="card card-inverse card-warning">
-        <div class="card-block pb-0">
-          <div class="btn-group float-right">
-            <button type="button" class="btn btn-transparent dropdown-toggle p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-settings"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div>
-          <h4 class="mb-0">{{onlineUsers}}</h4>
-          <p>Members online</p>
+        <div class="card-block pb-0 random-title">
+          <h5 class="mb-0">Random Dates</h5>
         </div>
-        <div class="chart-wrapper" style="height:70px;">
-          <canvas baseChart class="chart"
-          [datasets]="lineChart3Data"
-          [labels]="lineChart3Labels"
-          [options]="lineChart3Options"
-          [colors]="lineChart3Colours"
-          [legend]="lineChart3Legend"
-          [chartType]="lineChart3Type"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
+        
+        <div class="chart-wrapper" style="height:80px;">          
+          <div *ngFor="let number of randomData.dateList" class="random-value-container">
+            {{number}}  
+          </div>
         </div>
       </div>
     </div><!--/.col-->
     <div class="col-sm-6 col-lg-3">
       <div class="card card-inverse card-danger">
-        <div class="card-block pb-0">
-          <div class="btn-group float-right" dropdown placement="bottom right">
-            <button type="button" class="btn btn-transparent dropdown-toggle p-0" dropdownToggle>
-              <i class="icon-settings"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div>
-          <h4 class="mb-0">{{onlineUsers}}</h4>
-          <p>Members online</p>
-        </div>
-        <div class="chart-wrapper px-3" style="height:70px;">
-          <canvas baseChart class="chart"
-          [datasets]="barChart1Data"
-          [labels]="barChart1Labels"
-          [options]="barChart1Options"
-          [colors]="barChart1Colours"
-          [legend]="barChart1Legend"
-          [chartType]="barChart1Type"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>
+        <div class="card-block pb-0 random-title">
+          <h5 class="mb-0">Random Booleans</h5>
+        </div>        
+        <div class="chart-wrapper px-3" style="height:80px;">
+          <div *ngFor="let number of randomData.booleanList" class="random-value-container">
+            {{number}}  
+          </div>                    
         </div>
       </div>
     </div><!--/.col-->

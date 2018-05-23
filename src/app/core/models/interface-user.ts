@@ -8,4 +8,5 @@ export interface IUser {
   photoURL?: string;  
   online: boolean;
   roles: Roles;
+  refreshRandomButtonClicks?: number;
 }

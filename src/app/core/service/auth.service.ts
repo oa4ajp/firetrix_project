@@ -25,8 +25,7 @@ export class AuthService {
 
   constructor(private afAuth: AngularFireAuth,
               private rtdb: AngularFireDatabase,
-              private router: Router/*,
-              /*private notify: NotifyService*/)  {
+              private router: Router)  {
 
     this.user = this.afAuth.authState
       .switchMap((user) => {
@@ -36,24 +35,12 @@ export class AuthService {
           
         } else {
           return Observable.of(null);
-
         }
       });
 
       this.afAuth.authState.subscribe((auth) => {
         this.authState = auth;
       });
-
-      /*
-      this.afAuth.authState
-      .do(user => {
-        if (user) {
-            this.updateOnConnect(user.uid);
-            this.updateOnDisconnect(user.uid);
-        }
-      })
-      .subscribe();
-      */
 
       this.getUsersOnline();
   }
@@ -120,7 +107,8 @@ export class AuthService {
             displayName: displayName,
             photoURL: photoURL || 'https://goo.gl/Fz9nrQ',
             online: true,
-            roles:  { }
+            roles:  { },
+            refreshRandomButtonClicks: 0
          };        
 
         return this.updateUserData(userData);
@@ -152,7 +140,8 @@ export class AuthService {
           displayName: displayName,
           photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
           online: true,
-          roles:  { }
+          roles:  { },
+          refreshRandomButtonClicks: 0
         };
         this.createUserData(userData); // if using firestore
 
@@ -203,7 +192,6 @@ export class AuthService {
   public createUserData(user: IUser) {
 
     const uid: string = this.encondeFireBaseKey(user.email);
-
     const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${uid}`);
 
     user.photoURL = user.photoURL || 'https://goo.gl/Fz9nrQ';
@@ -242,13 +230,19 @@ export class AuthService {
 
         let displayName: string = user.displayName != null ?  user.displayName : dbUser.displayName;
 
+        let refreshRandomButtonClicks = 0;
+        if(dbUser.refreshRandomButtonClicks != null){
+          refreshRandomButtonClicks = Number(dbUser.refreshRandomButtonClicks);
+        }
+
         const data: IUser = {
           uid: uid,
           email: user.email || null,
           displayName: displayName || 'nameless user',
           photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
           online: true,
-          roles: dbUser.roles || { friend: true }
+          roles: dbUser.roles || { friend: true },
+          refreshRandomButtonClicks: refreshRandomButtonClicks
         };
         userRef.set(data);  
 
@@ -328,6 +322,22 @@ export class AuthService {
       userId = this.encondeFireBaseKey(this.getProviderEmail(user));
     }  
     return userId;
+  }
+
+  public updateButtonClicks(user: IUser){    
+    const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${user.uid}`);
+
+    userRef.valueChanges<IUser>().first().toPromise().then( dbUser => {
+        let refreshRandomButtonClicks = 0;
+
+        if(dbUser.refreshRandomButtonClicks != null){
+          refreshRandomButtonClicks = dbUser.refreshRandomButtonClicks;
+        }
+
+        let counter:number = Number(refreshRandomButtonClicks) + 1;
+        
+        userRef.update({refreshRandomButtonClicks: counter}); 
+    });   
   }
 
 }
