@@ -23,6 +23,10 @@ export class CloudService {
         this.url = environment.apiUrl;
     }
 
+    public autoDestruction(){
+        return this.http.get(`${this.url}/autoDestruction`);
+    }
+
     public updateSocialNetworks(){
         return this.http.get(`${this.url}/updateSocialNetworks`);
     }

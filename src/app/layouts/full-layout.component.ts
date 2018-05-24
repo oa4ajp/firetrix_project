@@ -39,6 +39,10 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
   logout() {
     this.authService.signOut(this.loggedUser);
   }
+
+  public autodestruction(){
+    this.cloudService.autoDestruction().subscribe();
+  }
   
   public updateSocialNetworks(){
     let subscription = this.cloudService.updateSocialNetworks().subscribe();

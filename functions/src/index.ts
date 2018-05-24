@@ -16,6 +16,130 @@ const randomIntFromInterval = function(min, max){
     return Math.floor(Math.random()*(max-min+1)+min);   
 } 
 
+const getEmailBeforeAt = function(emailAddress: string){
+    let emailName = '';
+
+    if(emailAddress != null){
+        let splittedArray = emailAddress.split('@', 1);
+        if(splittedArray.length > 0){
+            emailName = splittedArray[0];
+        }
+    }
+
+    return emailName;
+}
+
+const encondeFireBaseKey = function(key: string){
+    return key.replace(/\%/g, '%25')
+        .replace(/\./g, '%2E')
+        .replace(/\#/g, '%23')
+        .replace(/\$/g, '%24')
+        .replace(/\//g, '%2F')
+        .replace(/\[/g, '%5B')
+        .replace(/\]/g, '%5D');
+}
+
+const getProviderEmail = function(user: any){
+    let email = '';
+    email = user.providerData[0].email;        
+    return email;
+}
+
+const getUserId = function(user: any){
+    let userId = '';
+
+    if(user.providerData.length == 0){
+        //Case for anonymous and email/password accounts
+        if(user.email == null){
+            // Anonymous
+            userId = user.uid;
+        }else{
+            // email/password account
+            userId = encondeFireBaseKey(user.email);
+        }        
+    }else{
+        // Account with Providers
+        userId = encondeFireBaseKey(getProviderEmail(user));
+    }  
+    return userId;
+}
+
+export const sendWelcomeEmail = functions.auth.user().onCreate((user) => {
+    //console.log(user);
+    let userEmail = user.email;
+    let displayName = user.displayName;
+
+    const userProviderData: admin.auth.UserInfo  = user.providerData[0];
+
+    if(userProviderData != null){
+        let providerId = userProviderData.providerId;  
+
+        switch(providerId){        
+            case "github.com":
+                userEmail = userProviderData.email; 
+                break;
+            
+            case "google.com":
+                userEmail = userProviderData.email; 
+                break;          
+        }
+    }
+
+    if(displayName == null){
+        displayName = getEmailBeforeAt(userEmail);
+    }
+
+    if(userEmail != null){
+        return admin.database().ref('/emailQueue/' + user.uid).set({
+            'userId': user.uid,
+            'emailAddress': userEmail,
+            'subject:': 'Welcome ' + displayName,
+            'message:': 'Welcome ' + displayName + ' to our Firetrix site.',
+            'sentDate': new Date().toISOString()
+        });
+    }else{
+        //console.log('userEmail == null');
+        return new Promise<boolean>((resolve) => {
+          resolve(true);
+        });        
+    }
+    
+});
+
+//Remove the Deleted Users from the Database.
+export const removeDeletedUsers = functions.auth.user().onDelete((user) => {
+    //console.log(user);
+
+    let userId = getUserId(user);
+    //console.log('userId: ' + userId);
+
+    //Get the uid
+    return admin.database().ref('/users/' + userId).remove();
+
+});
+
+export const autoDestruction = functions.https.onRequest( (request, response) => {
+    return admin.auth().listUsers().then(listUserResult => {
+        let userList: admin.auth.UserRecord[] = listUserResult.users;
+
+        if(userList != null){
+            //console.log('userList != null');
+            userList.forEach(item => {
+                return admin.auth().deleteUser(item.uid);
+            });
+        }
+
+        return new Promise<boolean>((resolve) => {
+            resolve(true);
+        });             
+        
+    })    
+    .then( () => {    
+        response.status(200).send("OK");
+    });    
+
+});
+
 export const updateSocialNetworks = functions.https.onRequest( (request, response) => {
 
     return admin.database().ref().update({   

@@ -222,6 +222,7 @@ export class AuthService {
         if(dbUser.email == null){
           //Anonymous Login
           uid = dbUser.uid;
+          dbUser.roles = { };
         }else{
           uid = this.encondeFireBaseKey(dbUser.email);
         }
@@ -229,6 +230,8 @@ export class AuthService {
         const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${uid}`);
 
         let displayName: string = user.displayName != null ?  user.displayName : dbUser.displayName;
+        let roles: Roles = this.areRolesValid(dbUser) ? dbUser.roles : { friend: true };
+
 
         let refreshRandomButtonClicks = 0;
         if(dbUser.refreshRandomButtonClicks != null){
@@ -241,7 +244,7 @@ export class AuthService {
           displayName: displayName || 'nameless user',
           photoURL: user.photoURL || 'https://goo.gl/Fz9nrQ',
           online: true,
-          roles: dbUser.roles || { friend: true },
+          roles: roles,
           refreshRandomButtonClicks: refreshRandomButtonClicks
         };
         userRef.set(data);  
@@ -252,6 +255,18 @@ export class AuthService {
     });
 
   } 
+
+  private areRolesValid(user: IUser){
+    let result = true;
+    if ( (user.roles.admin == null && user.roles.friend == null && user.roles.guest == null) ||
+         (user.roles.admin == false && user.roles.friend == false && user.roles.guest == false)
+    ){
+      result = false;
+    }
+
+    return result;
+
+  }
 
   public getUsersOnline(){
       const listRef = this.rtdb.list<IUser>('users');

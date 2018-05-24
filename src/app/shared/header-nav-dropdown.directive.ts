@@ -8,7 +8,6 @@ export class HeaderNavDropdownDirective {
   constructor(private el: ElementRef) { }
 
   toggle() {
-    console.log('toggle()');
     this.el.nativeElement.classList.toggle('open');
   }
 }
