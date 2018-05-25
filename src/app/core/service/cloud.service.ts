@@ -18,15 +18,19 @@ import 'rxjs/add/operator/elementAt';
 @Injectable()
 export class CloudService {
     private url: string;
-    private apiUrl: string;
+    //private apiUrl: string;
 
     constructor(private http: Http)  {
         this.url = environment.apiUrl;
-        this.apiUrl = environment.firebase.authDomain;
+        //this.apiUrl = 'https://us-central1-cloud-functions001.cloudfunctions.net';
     }
 
     public autoDestruction(){
-        return this.http.get(`https://${this.apiUrl}/api/autoDestruction`);
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Access-Control-Allow-Origin', '*');
+        let options = new RequestOptions({ headers: headers });
+        return this.http.get(`${this.url}/autoDestruction`, options);
     }
 
     public updateSocialNetworks(){

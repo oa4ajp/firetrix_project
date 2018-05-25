@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import * as cors from 'cors';
 
 const config = {
     apiKey: "AIzaSyA0qvbVS8i8IdbzFpPQSrQEZSPXLdY9t7I",
@@ -118,26 +119,29 @@ export const removeDeletedUsers = functions.auth.user().onDelete((user) => {
 
 });
 
+const corsHandler = cors({origin: true});
+
 export const autoDestruction = functions.https.onRequest( (request, response) => {
-    return admin.auth().listUsers().then(listUserResult => {
-        let userList: admin.auth.UserRecord[] = listUserResult.users;
+    corsHandler(request, response, () => {
+		return admin.auth().listUsers().then(listUserResult => {
+			let userList: admin.auth.UserRecord[] = listUserResult.users;
 
-        if(userList != null){
-            //console.log('userList != null');
-            userList.forEach(item => {
-                return admin.auth().deleteUser(item.uid);
-            });
-        }
+			if(userList != null){
+				//console.log('userList != null');
+				userList.forEach(item => {
+					return admin.auth().deleteUser(item.uid);
+				});
+			}
 
-        return new Promise<boolean>((resolve) => {
-            resolve(true);
-        });             
-        
-    })    
-    .then( () => {    
-        response.status(200).send("OK");
-    });    
-
+			return new Promise<boolean>((resolve) => {
+				resolve(true);
+			});             
+			
+		})
+		.then( () => {    
+			response.status(200).send("OK");
+		});		
+	});
 });
 
 export const updateSocialNetworks = functions.https.onRequest( (request, response) => {
