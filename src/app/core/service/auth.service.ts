@@ -176,8 +176,13 @@ export class AuthService {
       }
 
       const userRef: AngularFireObject<IUser> = this.rtdb.object(`users/${uid}`);
-      userRef.update({online: false});
-      this.userId = null;
+
+      userRef.valueChanges().first().subscribe(response =>{
+        if(response){
+          userRef.update({online: false});
+        }                
+        this.userId = null;
+      });            
 
       this.router.navigate(['login']);
     });

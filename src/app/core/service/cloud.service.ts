@@ -18,13 +18,15 @@ import 'rxjs/add/operator/elementAt';
 @Injectable()
 export class CloudService {
     private url: string;
+    private apiUrl: string;
 
     constructor(private http: Http)  {
         this.url = environment.apiUrl;
+        this.apiUrl = environment.firebase.authDomain;
     }
 
     public autoDestruction(){
-        return this.http.get(`${this.url}/autoDestruction`);
+        return this.http.get(`https://${this.apiUrl}/api/autoDestruction`);
     }
 
     public updateSocialNetworks(){

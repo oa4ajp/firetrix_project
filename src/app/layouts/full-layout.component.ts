@@ -3,6 +3,7 @@ import { AuthService } from '../core/service/auth.service';
 import { IUser } from '../core/models/interface-user';
 import { CloudService } from '../core/service/cloud.service';
 import { Observable, Subscription } from 'rxjs/Rx';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +17,11 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
   public loggedUser: IUser;
   public subscriptionUser: Subscription;
   
-  constructor(private authService: AuthService, private cloudService: CloudService) {     
+  constructor(
+    private authService: AuthService, 
+    private cloudService: CloudService,
+    private router: Router
+  ) {     
   }
 
   ngOnInit(): void {
@@ -41,7 +46,9 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
   }
 
   public autodestruction(){
-    this.cloudService.autoDestruction().subscribe();
+    this.cloudService.autoDestruction().subscribe( response => {
+      this.router.navigate(['login']);
+    });
   }
   
   public updateSocialNetworks(){
