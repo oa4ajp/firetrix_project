@@ -34,13 +34,19 @@
 <div class="app-body">
   <div class="sidebar">
     <nav class="sidebar-nav">
-      <ul class="nav">
+      <ul class="nav">  
         <li class="nav-title text-center">
           <span>Dashboard</span>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/dashboard']"><i class="icon-speedometer"></i>Dashboard</a>
         </li>
+        <li class="nav-title text-center">
+          <span>Student</span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="updateSocialNetworks()" style="cursor:pointer;"><i class="fa fa-graduation-cap"></i> Information </a>
+        </li>  
         <li class="nav-title text-center">
           <span>Cloud Functions</span>
         </li>
@@ -64,19 +70,6 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" (click)="updateSalesByDay()" style="cursor:pointer;"><i class="fa fa-cloud"></i>updateSalesByDay( )</a>
-        </li>                
-
-        <li class="nav-title text-center">
-          <span>Labels</span>
-        </li>
-        <li class="nav-item hidden-cn">
-          <a class="nav-label" href="#"><i class="fa fa-circle text-danger"></i>updateSocialNetworks()</a>
-        </li>
-        <li class="nav-item hidden-cn">
-          <a class="nav-label" href="#"><i class="fa fa-circle text-info"></i> Label info</a>
-        </li>
-        <li class="nav-item hidden-cn">
-          <a class="nav-label" href="#"><i class="fa fa-circle text-warning"></i> Label warning</a>
         </li>
       </ul>
     </nav>

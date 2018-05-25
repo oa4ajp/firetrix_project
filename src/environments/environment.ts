@@ -10,7 +10,7 @@ export const environment = {
     authDomain: "firetrix-project-mendiola.firebaseapp.com",
     databaseURL: "https://firetrix-project-mendiola.firebaseio.com",
     projectId: "firetrix-project-mendiola",
-    storageBucket: "",
+    storageBucket: "firetrix-project-mendiola.appspot.com",
     messagingSenderId: "31127316738"
   },
   apiUrl: "https://us-central1-firetrix-project-mendiola.cloudfunctions.net"  
