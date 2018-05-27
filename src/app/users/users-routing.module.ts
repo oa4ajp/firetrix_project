@@ -15,4 +15,4 @@ const routes: Routes = [
 })
 export class UsersRoutingModule { }
 
-export const routedComponents = [LoginComponent];
+export const routedComponents = [LoginComponent, RegisterComponent];

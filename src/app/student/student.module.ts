@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { FormsModule }   from '@angular/forms';
 
-import { UsersRoutingModule, routedComponents } from './users-routing.module';
+import { StudentRoutingModule, routedComponents} from './student-routing.module';
 import { SharedModule } from '../shared/shared.module';
+
 
 @NgModule({
   imports: 
   [
-    UsersRoutingModule, 
+    StudentRoutingModule, 
     SharedModule,
     FormsModule
   ],
-  declarations: [routedComponents]
+  declarations: [ routedComponents ]
 })
-export class UsersModule { }
+export class StudentModule { }

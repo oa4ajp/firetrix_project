@@ -24,12 +24,14 @@ import { FullLayoutComponent } from './layouts/full-layout.component';
 import { SimpleLayoutComponent } from './layouts/simple-layout.component';
 
 import { UsersModule } from './users/users.module';
+import { StudentModule } from './student/student.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     UsersModule,
+    StudentModule,
     // Routes get loaded in order. It is important that login
     // come before AppRoutingModule, as
     // AppRoutingModule defines the catch-all ** route

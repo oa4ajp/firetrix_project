@@ -21,16 +21,14 @@ export const routes: Routes = [
       title: 'Home'
     },
     children: [
-      /*
-      {
-        path: '',
-        loadChildren: './dashboard/dashboard.module#DashboardModule'
-      },
-      */
       {
         path: 'dashboard',
         loadChildren: './dashboard/dashboard.module#DashboardModule'
       },
+      {
+        path: 'student',
+        loadChildren: './student/student.module#StudentModule'
+      },      
       {
         path: 'components',
         loadChildren: './components/components.module#ComponentsModule'
