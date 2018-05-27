@@ -83,7 +83,6 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   @ViewChild("trafficCanvas") trafficCanvas: BaseChartDirective; 
 
   public subscriptionRandomData: Subscription;
-  //public subscriptionAnonymousRandData: Subscription;
   public randomData: IRandomData;
   public subscriptionUser: Subscription;
   public loggedUser: IUser;
@@ -107,6 +106,15 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.productsList = [];
     this.randomData = {numberList: [], dateList: [], booleanList: []};
     this.loggedUser = {} as IUser;
+
+    this.setTraffic();
+    this.setDailyTraffic();
+    this.setSocialNetworks();
+    this.setSalesTraffic();
+    this.setSalesByDay();
+    this.setSalesByGender();
+    this.setSalesByOrigin();
+    this.setProducts();
   }
 
   ngOnInit(): void {
@@ -710,4 +718,38 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.randDataService.generateRandomData();
   }
 
+  public setTraffic(){
+    this.trafficService.setTraffic();    
+  }
+
+  public setDailyTraffic(){
+    this.trafficService.setDailyTraffic();    
+  }  
+
+  public setSocialNetworks(){
+    this.socialNetworkService.setSocialNetworks();    
+  }
+
+  public setSalesTraffic(){
+    this.salesService.setSalesTraffic();    
+  }
+
+  public setSalesByDay(){
+    this.salesService.setSalesByDay();    
+  }
+
+  public setSalesByGender(){
+    this.salesService.setSalesByGender();    
+  }
+
+  public setSalesByOrigin(){
+    this.salesService.setSalesByOrigin();    
+  }  
+
+  public setProducts(){
+    this.salesService.setProducts();    
+  }  
+
 }
+
+ 

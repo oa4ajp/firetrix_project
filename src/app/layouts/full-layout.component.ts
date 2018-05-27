@@ -21,7 +21,7 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
     private authService: AuthService, 
     private cloudService: CloudService,
     private router: Router
-  ) {     
+  ) {
   }
 
   ngOnInit(): void {
@@ -47,7 +47,7 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
 
   public autodestruction(){
     this.cloudService.autoDestruction().subscribe( response => {
-      this.router.navigate(['login']);
+       this.logout();
     });
   }
   
@@ -79,6 +79,10 @@ export class FullLayoutComponent implements OnInit, OnDestroy {
 
   public updateSalesByDay(){
     this.cloudService.updateSalesByDay().subscribe();    
-  }                
+  }   
+
+  public updateSalesByOrigin(){
+    this.cloudService.updateSalesByOrigin().subscribe();    
+  }              
 
 }

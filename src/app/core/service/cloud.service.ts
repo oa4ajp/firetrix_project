@@ -18,19 +18,13 @@ import 'rxjs/add/operator/elementAt';
 @Injectable()
 export class CloudService {
     private url: string;
-    //private apiUrl: string;
 
     constructor(private http: Http)  {
         this.url = environment.apiUrl;
-        //this.apiUrl = 'https://us-central1-cloud-functions001.cloudfunctions.net';
     }
 
     public autoDestruction(){
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Access-Control-Allow-Origin', '*');
-        let options = new RequestOptions({ headers: headers });
-        return this.http.get(`${this.url}/autoDestruction`, options);
+        return this.http.get(`${this.url}/autoDestruction`);
     }
 
     public updateSocialNetworks(){
@@ -56,5 +50,9 @@ export class CloudService {
     public updateSalesByDay(){
         return this.http.get(`${this.url}/updateSalesByDay`);
     }
+
+    public updateSalesByOrigin(){
+        return this.http.get(`${this.url}/updateSalesByOrigin`);
+    }    
     
 }
