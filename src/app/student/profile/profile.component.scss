@@ -1,1 +1,17 @@
 
+.profile-root-container{
+  display: flex;
+  flex-direction: column;
+}
+.profile-row-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.img-avatar {
+  height: 100px;
+  width: 100px;
+}
+.profile-row-content {
+  padding: 1em;
+}

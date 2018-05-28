@@ -5,7 +5,7 @@ import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 import { IRandomData } from '../models/interface-random-data';
-
+import DateUtil from '../../core/utils/date-util';
 
 @Injectable()
 export class RandomDataService {
@@ -46,8 +46,8 @@ export class RandomDataService {
 
     public randomDate(min, max){
         const intValue = Math.floor(Math.random()*(max-min+1)+min);
-        let randomDate:Date =  this.addDays(new Date(), intValue);        
-        return randomDate.toISOString();
+        let randomDate:Date =  this.addDays(new Date(), intValue);
+        return DateUtil.getFormattedDate(randomDate);
     }     
 
     public addDays(date, days) {

@@ -1,4 +1,29 @@
 <div class="container">
-  Student Profile
+  <div>&nbsp;</div>
+  <div class="card">
+      <div class="card-header profile-row-container">
+        <h3>Student Profile</h3>
+      </div>
+      <div class="card-body">
+        <div class="profile-row-container profile-row-content">
+          <img src="https://lh5.googleusercontent.com/-S7i5hzB-Ftw/AAAAAAAAAAI/AAAAAAAAAZ4/v9Juo0cFvPg/photo.jpg" class="img-avatar" alt="Avatar">
+        </div>
+        <div class="profile-row-container profile-row-content">
+          <h5>Alfredo Mendiola Loyola</h5>
+        </div>
+      </div>
+      <div class="profile-row-container">
+        <h6>Full Stack Developer</h6>
+      </div>
+      <div class="profile-row-container profile-row-content" style="text-decoration: none">
+        <a #linkDownload (click)="downloadSourceCode()" target="_self" class="" href="{{downloadUrl}}">Download source code</a>
+      </div>
+      <div class="profile-row-container">
+        File Upload date: {{updatedDate}}
+      </div>            
+      <div class="profile-row-container profile-row-content">
+        <a #linkSite (click)="goToSite()" target="_blank" class="" href="{{siteUrl}}">{{siteName}}</a>
+      </div>      
+  </div> 
 </div>
 

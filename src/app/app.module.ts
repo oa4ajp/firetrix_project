@@ -31,7 +31,6 @@ import { StudentModule } from './student/student.module';
     BrowserModule,
     BrowserAnimationsModule,
     UsersModule,
-    StudentModule,
     // Routes get loaded in order. It is important that login
     // come before AppRoutingModule, as
     // AppRoutingModule defines the catch-all ** route
